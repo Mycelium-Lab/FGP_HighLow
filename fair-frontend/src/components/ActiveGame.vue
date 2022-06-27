@@ -223,4 +223,32 @@ export default {
     justify-content: center;
     align-items: center;
 }
+
+@media screen and (max-width: 600px) {
+    .currentgame {
+        padding: 16px 24px;
+    }
+
+    .join_btn {
+        height: 55px;
+        max-width: 100px;
+        font-size: 12px;
+        line-height: 12px;
+        padding: 10px;
+    }
+
+    .info_row {
+        padding: 4px;
+    }
+
+    .info_row-title {
+        font-size: 10px;
+        line-height: 13px;
+    }
+
+    .info_row-value {
+        font-size: 10px;
+        line-height: 13px;
+    }
+}
 </style>

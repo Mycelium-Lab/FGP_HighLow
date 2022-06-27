@@ -63,4 +63,11 @@ h1 {
     margin-top: 36px;
     margin-bottom: 36px;
 }
+
+@media screen and (max-width: 1000px) {
+  .page {
+    padding-left: 36px;
+    padding-right: 36px;
+  }
+}
 </style>

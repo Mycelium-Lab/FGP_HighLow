@@ -32,7 +32,7 @@
       </div>
       <h2 @click="openRules()">Game rules</h2>
     </div>
-    <div class="currentgames-wrapper">
+    <div v-if="games[0]" class="currentgames-wrapper">
       <h1>Current games</h1>
       <div id="currentGames" class="currentgames">
         <ActiveGame class="activegame" v-for="game in games" :key="game[3]"
@@ -190,11 +190,21 @@ h2 {
 .newgame-form-unit input {
   border: 1px solid #2C2F33;
   background: #F27C2F;
+  font-family: 'Orbitron';
+  font-weight: 600;
+  font-size: 15px;
+  color: #2C2F33;
+  max-width: 96px;
 }
 
 .newgame-form-unit select {
   border: 1px solid #2C2F33;
   background: #F27C2F;
+  font-family: 'Orbitron';
+  font-weight: 600;
+  font-size: 15px;
+  color: #2C2F33;
+  max-width: 96px;
 }
 
 .newgame-start {
@@ -234,5 +244,28 @@ h2 {
   row-gap: 48px;
   justify-items: center;
   align-items: center;
+}
+
+@media screen and (max-width: 1000px) {
+  .currentgames {
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+@media screen and (max-width: 700px) {
+  .newgame {
+    flex-direction: column;
+    align-items: center;
+    padding: 26px;
+  }
+
+  .newgame-start {
+    padding: 25px 78px;
+  }
+
+  .currentgames-wrapper {
+    padding: 14px;
+  }
 }
 </style>

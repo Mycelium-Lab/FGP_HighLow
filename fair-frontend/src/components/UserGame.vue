@@ -232,4 +232,59 @@ export default {
 .orange {
     color: #F27C2F;
 }
+
+@media screen and (max-width: 1000px) {
+    .usergame {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .usergame_info {
+        width: 100%;
+    }
+
+    .usergame-btn-wrapper {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .usergame_btn {
+        width: 100%;
+    }
+}
+
+@media screen and (max-width: 500px) {
+    .usergame_info-row {
+        margin-left: 0;
+    }
+
+    .info-row-title {
+        font-size: 10px;
+        line-height: 13px;
+    }
+
+    .info-row-value {
+        font-size: 10px;
+        line-height: 13px;
+    }
+
+    .usergame {
+        padding: 20px 21px;
+    }
+
+    .usergame_btn {
+        padding: 14px;
+        min-height: 40px;
+    }
+
+    .btn_title {
+        font-size: 14px;
+        line-height: 14px;
+    }
+
+    .btn_caption {
+        font-size: 10px;
+        line-height: 10px;
+    }
+}
 </style>

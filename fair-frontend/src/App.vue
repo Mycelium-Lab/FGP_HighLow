@@ -295,4 +295,10 @@ body {
   justify-content: flex-start;
   align-items: center;
 }
+
+@media screen and (max-width: 600px) {
+  .fair-home {
+    width: calc(100% - 16px)
+  }
+}
 </style>
