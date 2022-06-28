@@ -60,6 +60,9 @@ export default {
     },
     address: function() {
         return this.$store.state.user
+    },
+    prizeInTokens: function() {
+        return ethers.utils.formatEther(this.prize)
     }
   },
   props: {
@@ -69,7 +72,8 @@ export default {
     status: String,
     id: String,
     pool: String,
-    luckyNumber: String
+    luckyNumber: String,
+    prize: String
   },
   methods: {
     getStatus() {
@@ -80,7 +84,7 @@ export default {
             this.realStatus = 'finished'
             this.usergamebtn_txt = 'Claim'
             console.log(this.pool)
-            this.usergamebtn_secondary = ethers.utils.formatEther((this.pool).toString()) + ' tokens'
+            this.usergamebtn_secondary = ethers.utils.formatEther((this.prize).toString()) + ' tokens'
         } else if (this.status == 2) {
             this.realStatus = 'readyToFinish'
             this.usergamebtn_txt = 'Finish'

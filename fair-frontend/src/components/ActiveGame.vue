@@ -135,6 +135,7 @@ export default {
     height: 89px;
     background: 0;
     padding: 12px 24px;
+    width: 153px;
     background-image: url('../assets/icons/join.png');
     background-size: 100% 100%;
     background-repeat: no-repeat;
@@ -231,6 +232,7 @@ export default {
 
     .join_btn {
         height: 55px;
+        width: auto;
         max-width: 100px;
         font-size: 12px;
         line-height: 12px;

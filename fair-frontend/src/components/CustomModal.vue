@@ -3,7 +3,7 @@
         <div v-if="active" class="modal-box">
             <div class="modal-header">
                 <div></div>
-                <img class="closebtn" @click="closeModal()" src="../assets/icons/x.png">
+                <img class="closebtn" @click="handleClose()" src="../assets/icons/x.png">
             </div>
             <div class="modal-body">
                 <h1>{{ modalTitle }}</h1>
@@ -18,8 +18,8 @@
                 </div>
                 <img class="maskot" v-if="modalType === 'rules'||modalType === 'info'" src="../assets/maskot.png">
                 <div v-if="modalType === 'confirm'" class="button-wrapper">
-                    <button class="modalbtn">NO</button> <!-- close modal somehow -->
-                    <button class="modalbtn">YES</button> <!-- suffice whatever needs to be -->
+                    <button @click="handleClose()" class="modalbtn">NO</button>
+                    <button @click="confirmNewBet()" class="modalbtn orange">YES</button>
                 </div>
             </div>
         </div>
@@ -53,14 +53,18 @@ export default {
     props: {
     },
     methods: {
-        closeModal() {
-            this.$store.commit('SET_MODAL', false, '', '', '')
-        }
+        handleClose() {
+            this.$store.commit('SET_MODAL', false)
+            this.$store.commit('SET_TITLE', '')
+            this.$store.commit('SET_TYPE', '')
+            this.$store.commit('SET_CAPTION', '')
+        },
+        confirmNewBet() {}
     }
 }
 </script>
 
-<style>
+<style scoped>
 h1 {
     margin-top: 32px;
     margin-bottom: 32px;
@@ -84,7 +88,7 @@ h2 {
     align-items: flex-start;
     position: absolute;
     width: 100%;
-    height: 100%;
+    min-height: 100%;
     background-color: rgba(0,0,0,0.3)
 }
 .modal-box {
@@ -152,5 +156,52 @@ h2 {
 
 .closebtn {
     cursor: pointer;
+}
+
+.button-wrapper {
+    margin-top: 16px;
+}
+
+.modalbtn {
+    font-family: 'Press Start 2P';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 15px;
+    line-height: 15px;
+    color: #000000;
+    padding: 13px 20px;
+    border: 0;
+    margin: 6px;
+    -webkit-box-shadow: 4px 4px 0px 0px rgba(0, 0, 0, 0.9);
+    -moz-box-shadow: 4px 4px 0px 0px rgba(0, 0, 0, 0.9);
+    box-shadow: 4px 4px 0px 0px rgba(0, 0, 0, 0.9);
+    cursor: pointer;
+    transition: 0.4s;
+}
+
+.modalbtn:hover {
+    transition: 0.4s;
+    background: #F27C2F;
+    transform: scale(1.1);
+    -webkit-box-shadow: 6px 6px 0px 0px rgba(0, 0, 0, 0.9);
+    -moz-box-shadow: 6px 6px 0px 0px rgba(0, 0, 0, 0.9);
+    box-shadow: 6px 6px 0px 0px rgba(0, 0, 0, 0.9);
+}
+
+.orange {
+    background: #F27C2F;
+}
+
+
+@media screen and (max-width: 1000px) {
+    .modal-box {
+        max-width: 90%;
+    }
+
+    .modal-rule {
+        font-size: 13px;
+        line-height: 16px;
+        margin: 14px;
+    }
 }
 </style>

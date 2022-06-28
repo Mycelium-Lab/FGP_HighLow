@@ -6595,6 +6595,11 @@
   dependencies:
     "minipass" "^2.9.0"
 
+"mitt@^3.0.0":
+  "integrity" "sha512-7dX2/10ITVyqh4aOSVI9gdape+t9l2/8QxHrFmUXu4EEUpdlxl6RudZUPZoc+zuY2hk1j7XxVroIVIan/pD/SQ=="
+  "resolved" "https://registry.npmjs.org/mitt/-/mitt-3.0.0.tgz"
+  "version" "3.0.0"
+
 "mkdirp-promise@^5.0.1":
   "integrity" "sha512-Hepn5kb1lJPtVW84RFT40YG1OddBNTOVUZR2bzQUHc+Z03en8/3uX0+060JDhcEzyO08HmipsN9DcnFMxhIL9w=="
   "resolved" "https://registry.npmjs.org/mkdirp-promise/-/mkdirp-promise-5.0.1.tgz"

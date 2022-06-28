@@ -106,7 +106,6 @@ nav {
     border: 3px solid #F27C2F;
     border-top: 0;
     box-sizing: border-box;
-    /*border-left: 3px solid #F27C2F;*/
     cursor: pointer;
 }
 .connect-btn img {

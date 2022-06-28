@@ -9,6 +9,7 @@
     :id="game[4]"
     :pool="game[5]"
     :luckyNumber="game[6]"
+    :prize="game[7]"
     />
   </div>
 </template>

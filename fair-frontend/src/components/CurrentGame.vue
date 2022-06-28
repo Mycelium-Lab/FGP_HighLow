@@ -86,28 +86,34 @@ export default {
     }
   },
   methods: {
+    async promptCreate() {
+      if (window.ethereum && this.address 
+          && (this.startgamenumber > 0 && this.startgamenumber < 101) 
+          && (this.startgameplayercount > -1 && this.startgameplayercount < 11 && this.startgameplayercount !== 1)
+      ) {
+        this.$store.commit('SET_MODAL', true)
+        this.$store.commit('SET_TITLE', 'Bid')
+        this.$store.commit('SET_TYPE', 'confirm')
+        this.$store.commit('SET_CAPTION', 'Your bid ' + this.startgamebid + ' tokens. Would you like to proceed?')
+      }
+    },
     async handleCreate() {
       const contract = this.contract;
       const address = this.address;
       const number = this.startgamenumber;
       const limit = this.startgameplayercount;
       const bid = this.startgamebid
-      if (window.ethereum && this.address 
-          && (this.startgamenumber > 0 && this.startgamenumber < 101) 
-          && (this.startgameplayercount > -1 && this.startgameplayercount < 11 && this.startgameplayercount !== 1)
-       ) {
-        try{
-          await contract.methods.createGame(BigNumber.from(number), BigNumber.from(limit)).send({from: address, value: ethers.utils.parseEther((bid).toString())}, (err, transactionHash) => {
-            if (err) {
-              console.log(err);
-            }
-            if (transactionHash) {
-              console.log(transactionHash);
-            }
-          });
-        } catch(err) {
-            console.log("error: ", err)
-        }
+      try{
+        await contract.methods.createGame(BigNumber.from(number), BigNumber.from(limit)).send({from: address, value: ethers.utils.parseEther((bid).toString())}, (err, transactionHash) => {
+          if (err) {
+            console.log(err);
+          }
+          if (transactionHash) {
+            console.log(transactionHash);
+          }
+        });
+      } catch(err) {
+          console.log("error: ", err)
       }
     },
     openRules() {

@@ -18,6 +18,8 @@ contract Fair {
         uint256 pool;
         uint256 individualPrize;
         uint8 luckyNumber;
+        uint256[] prizes;
+        address[] winners;
     }
 
     struct Bid {
@@ -32,6 +34,7 @@ contract Fair {
     struct Prize {
         bool isWinner;
         bool isClaimed;
+        uint256 prize;
     }
 
     mapping (uint256 => Game) public gamesList; // gameId => Game struct
@@ -52,15 +55,8 @@ contract Fair {
         biddersList[gameId][msg.sender].number = _number;
         biddersList[gameId][msg.sender].participatedFlag = true;
         gamesByUserList[msg.sender].gamesByUser.push(gameId);
-        emit GameCreated(gameId, _number);
         gameId ++;
     }
-
-    // function limitParticipants(uint256 _gameId, uint256 _limitNumber) public onlyInGamePeriod(_gameId) {
-    //     require(msg.sender == gamesList[_gameId].owner, "Only game owner can limit number of participants");    
-    //     require(_limitNumber >= gamesList[_gameId].participants.length, "Current game already has more participants than limit number"); 
-    //     gamesList[_gameId].participantsLimit = _limitNumber;
-    // }
 
     function joinGame(uint256 _gameId, uint8 _number) public payable onlyInRange(_number) onlyInGamePeriod(_gameId) {
         require(msg.value == gamesList[_gameId].bid, "Value of the transaction should be equal to the game");
@@ -73,7 +69,6 @@ contract Fair {
         biddersList[_gameId][msg.sender].number = _number;
         biddersList[_gameId][msg.sender].participatedFlag = true;
         gamesByUserList[msg.sender].gamesByUser.push(_gameId);
-        emit ParticipantJoined(_gameId, msg.sender, _number);
     }
 
     function finishGame(uint256 _gameId) public { 
@@ -90,57 +85,71 @@ contract Fair {
             uint8[] memory numbers = new uint8[](gamesList[_gameId].numbers.length);  // array of participants numbers for ascending sort
             winners = gamesList[_gameId].participants;
             numbers = gamesList[_gameId].numbers;
-            for(uint256 i; i < numbers.length - 1; i++) {
-                uint256 min = i;
-                uint8 firstDifference;
-                uint8 secondDifference;
-                if(numbers[min] >= randomNumber) {
-                    firstDifference = numbers[min] - randomNumber;
+            uint8[] memory differences = new uint8[](numbers.length);
+            for (uint256 i = 0; i < winners.length; i++) {
+                if (numbers[i] > randomNumber) {
+                    differences[i] = numbers[i] - randomNumber;
+                } else if (numbers[i] < randomNumber) {
+                    differences[i] = randomNumber - numbers[i];
                 } else {
-                    firstDifference = randomNumber - numbers[min];
-                }
-                for(uint256 j = i + 1; j < numbers.length; j++) {      
-                    if(numbers[j] >= randomNumber) {
-                        secondDifference = numbers[j] - randomNumber;
-                    } else {
-                        secondDifference = randomNumber - numbers[j];
-                    }
-                    if(secondDifference < firstDifference) {
-                        min = j;
-                        firstDifference = secondDifference;
-                    }
-                }
-                if(min != i) {
-                    uint8 targetNumber = numbers[i];
-                    address targetAddress = winners[i];
-                    numbers[i] = numbers[min];
-                    winners[i] = winners[min];
-                    numbers[min] = targetNumber;
-                    winners[min] = targetAddress;
+                    differences[i] = 0;
                 }
             }
-            uint256 numberOfWinners = winners.length * 3 / 10;  // 30% of participants
-            if(numberOfWinners == 0) {
-                prizeList[winners[0]][_gameId].isWinner = true;
-                gamesList[_gameId].individualPrize = gamesList[_gameId].pool;
-            } else {
-                for(uint256 k; k < numberOfWinners; k++) {
-                    prizeList[winners[k]][_gameId].isWinner = true;
-                    gamesList[_gameId].individualPrize = gamesList[_gameId].pool / numberOfWinners;
+            uint256 numberOfWinners = differences.length / 3;
+            if (numberOfWinners == 0) {
+                numberOfWinners = 1;
+            }
+            uint8[] memory positionsOfWinners = new uint8[](numberOfWinners);
+            address[] memory actualWinners = new address[](numberOfWinners);
+            
+            for (uint256 i = 0; i < numberOfWinners; i++) {
+                uint8 minDifference = 100;
+                uint8 winner;
+                for (uint8 j = 0; j < numbers.length; j++) {
+                    if (differences[j] < minDifference) {
+                        winner = j;
+                        minDifference = differences[j];
+                    }
                 }
+                differences[winner] = 100;
+                positionsOfWinners[i] = winner;
+                actualWinners[i] = winners[winner];
+            }
+            if (numberOfWinners > 1) {
+                uint256 pool = gamesList[_gameId].pool;
+                uint8 temp = 3;
+                for (uint256 i = 2; i < actualWinners.length; i++) {
+                    temp = temp * 2 + 1;
+                }
+                uint256 prizePiece = pool/temp;
+                for (uint256 i = actualWinners.length - 1; i > 0; i--) {
+                    prizeList[actualWinners[i]][_gameId].prize = prizePiece;
+                    prizeList[actualWinners[i]][_gameId].isWinner = true;
+                    gamesList[_gameId].prizes.push(prizePiece);
+                    gamesList[_gameId].winners.push(actualWinners[i]);
+                    prizePiece = prizePiece * 2;
+                }
+                prizeList[actualWinners[0]][_gameId].prize = prizePiece;
+                prizeList[actualWinners[0]][_gameId].isWinner = true;
+                gamesList[_gameId].prizes.push(prizePiece);
+                gamesList[_gameId].winners.push(actualWinners[0]);
+            }
+            else {
+                prizeList[actualWinners[0]][_gameId].isWinner = true;
+                prizeList[actualWinners[0]][_gameId].prize = gamesList[_gameId].pool;
+                gamesList[_gameId].prizes.push(gamesList[_gameId].pool);
+                gamesList[_gameId].winners.push(actualWinners[0]);
             }
         }
         gamesList[_gameId].isFinished = true;
         lastFinishedGameId = _gameId;
-        emit GameFinished(_gameId);
     }
 
     function claim(uint256 _gameId) public {
         require(prizeList[msg.sender][_gameId].isWinner == true, "You are not a winner of the game");
         require(prizeList[msg.sender][_gameId].isClaimed == false, "Prize is claimed already");
         prizeList[msg.sender][_gameId].isClaimed = true;
-        payable(msg.sender).transfer(gamesList[_gameId].individualPrize);
-        emit PrizeTransfered(_gameId, msg.sender, gamesList[_gameId].individualPrize);
+        payable(msg.sender).transfer(prizeList[msg.sender][_gameId].prize);
     }
 
     // Utils functions
@@ -168,8 +177,12 @@ contract Fair {
         return biddersList[_gameId][adr].number;
     }
 
+    function getPrizes(uint256 _gameId) public view returns(uint256[] memory, address[] memory) {
+        return (gamesList[_gameId].prizes, gamesList[_gameId].winners);
+    }
+
     function getUserGames(address _user) public view returns(uint256[] memory) {
-        uint256[] memory userGames = new uint256[](gamesByUserList[_user].gamesByUser.length * 7);
+        uint256[] memory userGames = new uint256[](gamesByUserList[_user].gamesByUser.length * 8);
         uint256 counter;
         for (uint256 _gameId; _gameId < gamesByUserList[_user].gamesByUser.length; _gameId ++) {
             uint256 currentGameId = gamesByUserList[_user].gamesByUser[_gameId];
@@ -179,6 +192,7 @@ contract Fair {
             userGames[counter + 4] = currentGameId;
             userGames[counter + 5] = gamesList[currentGameId].pool;
             userGames[counter + 6] = gamesList[currentGameId].luckyNumber;
+            userGames[counter + 7] = prizeList[_user][currentGameId].prize;
             if (prizeList[_user][currentGameId].isClaimed) {
                 userGames[counter + 3] = 0; // prize is claimed 
             } else if (prizeList[_user][currentGameId].isWinner) {
@@ -188,7 +202,7 @@ contract Fair {
             } else {
                 userGames[counter + 3] = 0; // the game in progress
             }
-            counter += 7;
+            counter += 8;
         }
         return userGames;
     }
@@ -196,7 +210,6 @@ contract Fair {
     function generateRandom() public returns(uint8) {
         uint8 randomNumber = uint8(uint(keccak256(abi.encodePacked(block.timestamp, msg.sender, nonce))) % 101); 
         nonce++;
-        // randomNumber = 15;
         return randomNumber;
     } 
 
@@ -211,11 +224,4 @@ contract Fair {
         require(block.timestamp <= gamesList[_gameId].createdTimestamp + 300, "The game is finished");  // 300 = 60 sec * 5
         _;
     }
-
-    // Events
-
-    event GameCreated(uint256 _gameId, uint8 _number);
-    event ParticipantJoined(uint256 _gameId, address indexed _participant, uint8 _number);
-    event GameFinished(uint256 _gameId);
-    event PrizeTransfered(uint256 _gameId, address indexed _participant, uint256 _amount);
 }

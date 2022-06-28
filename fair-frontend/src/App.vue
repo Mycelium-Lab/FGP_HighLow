@@ -109,7 +109,6 @@ export default {
             else {
               this.connectWallet();
             }
-            // await this.$store.dispatch('fetchFairContract', store.state)
             return accounts.length > 0;
           }
           await isMetaMaskConnected().then((connected) => {
@@ -142,31 +141,9 @@ export default {
       const web3 = this.web3;
       const contract = this.contract;
       const address = this.address;
-      // console.log(this.contract.events.GameCreated())
-      // this.contract.events.GameCreated({
-      //     // filter: {myIndexedParam: [20,23], myOtherIndexedParam: '0x123456789...'}, // Using an array means OR: e.g. 20 or 23
-      //     fromBlock: 0
-      // })
-      // .on('data', function(event){
-      //     console.log(event); // same results as the optional callback above
-      // })
-      // .on('changed', function(event){
-      //   console.log(event)
-      //     // remove event from local database
-      // })
-      // .on('error', error => {console.log(error)});
-      // await this.$store.dispatch('fetchPastEvents', store.state)
-      // let events = contract.events.allEvents({/*fromBlock: creationBlock, toBlock: 'latest'*/});
-      // events.get((error, events) => {
-      //     if (error)
-      //         console.log('Error getting events: ' + error);
-      //     else
-      //       console.log(events);
-      //         // return res.json
-      // });
+
       if (contract === null || address === null) {
         console.log('null contract/address, relaunch')
-        // this.launchApp();
         return
       }
       else {
@@ -230,10 +207,11 @@ export default {
     async getUserGames (contract, address) {
       let result = await contract.methods.getUserGames(address).call();
       const pastGamesList = [];
-      const chunkSize = 7;
+      const chunkSize = 8;
       for (let i = 0; i < result.length; i += chunkSize) {
           const chunk = result.slice(i, i + chunkSize);
           pastGamesList.push(chunk);
+          console.log(chunk)
       }
       await this.$store.commit('SET_PAST_GAMES', pastGamesList);
     },

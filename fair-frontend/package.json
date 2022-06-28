@@ -15,6 +15,7 @@
     "ethcall": "^4.7.2",
     "ethers": "^5.6.9",
     "https-browserify": "^1.0.0",
+    "mitt": "^3.0.0",
     "os-browserify": "^0.3.0",
     "stream-browserify": "^3.0.0",
     "stream-http": "^3.2.0",
