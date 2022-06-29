@@ -8,17 +8,20 @@
                 <span class="info_row-title">Before the start: </span><span class="info_row-value">{{timeToFinish}}</span>
             </div>
             <div class="info_row">
-                <span class="info_row-title">Number of players: </span><span class="info_row-value">{{participants}}</span>
+                <span class="info_row-title">Number of players: </span><span class="info_row-value">{{participants}} / {{processedLimit}}</span>
             </div>
-            <div v-if="joined === false" class="info_row">
+            <div v-if="joined === false && participants != limit" class="info_row">
                 <span class="info_row-title">Your number: </span><input class="info_row-input" type="text" v-model="number"/>
             </div>
-            <div v-else class="info_row">
+            <div v-else-if="participants != limit" class="info_row">
                 <span class="info_row-title">Your number: </span><span class="info_row-value">{{chosenNumber}}</span>
+            </div>
+            <div v-if="bets[0]" class="info_row">
+                <span class="info_row-title">Current bets: </span><span class="info_row-value">{{bets}}</span>
             </div>
         </div>
         <div class="button-wrapper">
-            <button v-bind:class="{joinbtndisabled: ownedGame === true, joinbtnwaiting: ownedGame === false && joined === true}" @click="handleJoin()" class="join_btn">{{joinbtn_text}}</button>
+            <button v-bind:class="{joinbtndisabled: ownedGame === true || participants == limit, joinbtnwaiting: ownedGame === false && joined === true}" @click="handleJoin()" class="join_btn">{{joinbtn_text}}</button>
         </div>
     </div>
 </template>
@@ -33,7 +36,8 @@ export default {
             currentTime: Date.now(),
             number: '',
             joinbtn_text: '',
-            ownedGame: false
+            ownedGame: false,
+            bets: []
         }
     },
     props: {
@@ -43,14 +47,23 @@ export default {
         id: String,
         owner: String,
         joined: Boolean,
-        chosenNumber: String
+        chosenNumber: String,
+        limit: String
     },
     created() {
-        this.setJoinBtnText()
+        this.setJoinBtnText();
+        this.getBets();
     },
     computed: {
         web3: function() {
             return this.$store.state.web3;
+        },
+        processedLimit: function() {
+            if (this.limit != 0) {
+                return this.limit
+            } else {
+                return '~'
+            }
         },
         contract: function() {
             return this.$store.state.fairContract;
@@ -83,6 +96,7 @@ export default {
             if (window.ethereum && address && contract
                 && (number > 0 && number < 101)
                 && this.joined === false
+                && this.bets.indexOf(number) === -1
             ) {
                 try{
                 await contract.methods.joinGame(id, BigNumber.from(number)).send({from: address, value: ethers.utils.parseEther((bid).toString())}, (err, transactionHash) => {
@@ -107,6 +121,12 @@ export default {
             } else {
                 this.joinbtn_text = 'Waiting'
             }
+        },
+        getBets: async function() {
+            const contract = this.contract;
+            const id = this.id;
+            let bets = await contract.methods.getNumbers(id).call();
+            this.bets = bets;
         }
     }
 }

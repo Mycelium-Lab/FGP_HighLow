@@ -20,6 +20,7 @@ contract Fair {
         uint8 luckyNumber;
         uint256[] prizes;
         address[] winners;
+        uint256[] bets;
     }
 
     struct Bid {
@@ -127,6 +128,7 @@ contract Fair {
                     prizeList[actualWinners[i]][_gameId].isWinner = true;
                     gamesList[_gameId].prizes.push(prizePiece);
                     gamesList[_gameId].winners.push(actualWinners[i]);
+                    // gamesList[_gameId].
                     prizePiece = prizePiece * 2;
                 }
                 prizeList[actualWinners[0]][_gameId].prize = prizePiece;
@@ -155,7 +157,7 @@ contract Fair {
     // Utils functions
 
     function getActualGames() public view returns(uint256[] memory) {
-        uint256[] memory actualGames = new uint256[]((gameId - lastFinishedGameId) * 4); 
+        uint256[] memory actualGames = new uint256[]((gameId - lastFinishedGameId) * 5); 
         uint256 counter;
         for (uint256 _gameId = lastFinishedGameId; _gameId < gameId; _gameId ++) {
             if (gamesList[_gameId].isFinished == false) {
@@ -163,7 +165,8 @@ contract Fair {
                 actualGames[counter + 1] = gamesList[_gameId].createdTimestamp;
                 actualGames[counter + 2] = gamesList[_gameId].participants.length;
                 actualGames[counter + 3] = _gameId;
-                counter += 4;
+                actualGames[counter + 4] = gamesList[_gameId].participantsLimit;
+                counter += 5;
             }
         }
         return actualGames;
@@ -177,8 +180,33 @@ contract Fair {
         return biddersList[_gameId][adr].number;
     }
 
-    function getPrizes(uint256 _gameId) public view returns(uint256[] memory, address[] memory) {
-        return (gamesList[_gameId].prizes, gamesList[_gameId].winners);
+    function getNumbers(uint256 _gameId) public view returns(uint8[] memory) {
+        return gamesList[_gameId].numbers;
+    }
+
+    function getPrizes(uint256 _gameId) public view returns(uint256[] memory, address[] memory, uint256[] memory) {
+        uint256[] memory bets = new uint256[](gamesList[_gameId].participants.length);
+        uint256[] memory rewards = new uint256[](gamesList[_gameId].prizes.length);
+        address[] memory players = new address[](gamesList[_gameId].winners.length);
+        for (uint256 i = 0; i < gamesList[_gameId].participants.length; i++) {
+            bets[i] = gamesList[_gameId].numbers[i];
+            players[i] = gamesList[_gameId].participants[i];
+            bool isWinner = false;
+            uint256 iterator = 0;
+            for (uint256 j = 0; j < gamesList[_gameId].winners.length; j++) {
+                if (gamesList[_gameId].winners[j] == players[i]) {
+                    isWinner = true;
+                    iterator = j;
+                }
+            }
+            if (isWinner) {
+                rewards[i] = gamesList[_gameId].prizes[iterator];
+            }
+            else {
+                rewards[i] = 0;
+            }
+        }
+        return (rewards, players, bets);
     }
 
     function getUserGames(address _user) public view returns(uint256[] memory) {

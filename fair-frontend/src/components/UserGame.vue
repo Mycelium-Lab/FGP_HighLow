@@ -1,7 +1,7 @@
 <template>
   <div class="usergame">
     <div class="usergame_info">
-        <div v-if="luckyNumber !== 0" class="usergame_info-row">
+        <div v-if="luckyNumber != 0" class="usergame_info-row">
             <span class="info-row-title">Lucky number: </span><span class="info-row-value">{{luckyNumber}}</span>
         </div>
         <div class="usergame_info-row">
@@ -12,6 +12,23 @@
         </div>
         <div class="usergame_info-row">
             <span class="info-row-title">Players: </span><span class="info-row-value">{{timestampAsDate}}</span>
+        </div>
+        <div class="usergame_info-row playersrow">
+            <div class="info-row-title"></div>
+            <div class="playersrow_table">
+                <div class="table-winners">
+                    <div class="table-title">Winners: </div>
+                    <div class="player winner" v-for="winner in winners" :key="winner.account">
+                        <span class="account">{{winner.account}}: </span><span class="bet">bet on {{winner.bet}},</span><span class="reward"> won {{winner.reward}} tokens</span>
+                    </div>
+                </div>
+                <div class="table-losers">
+                    <div class="table-title">Losers: </div>
+                    <div class="player loser" v-for="loser in losers" :key="loser.account">
+                        <span class="account">{{loser.account}}: </span><span class="bet">bet on {{loser.bet}},</span><span class="reward"> won {{loser.reward}} tokens</span>
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="usergame_info-row">
             <span class="info-row-title">Prize pool: </span><span class="info-row-value orange">{{wholePool}} ROSE</span>
@@ -39,11 +56,15 @@ export default {
     return {
         realStatus: '',
         usergamebtn_txt: '',
-        usergamebtn_secondary: ''
+        usergamebtn_secondary: '',
+        playersData: [],
+        winners: [],
+        losers: []
     }
   },
   created () {
     this.getStatus()
+    this.getPrizes()
   },
   computed: {
     bidInTokens: function() {
@@ -62,7 +83,7 @@ export default {
         return this.$store.state.user
     },
     prizeInTokens: function() {
-        return ethers.utils.formatEther(this.prize)
+        return ethers.utils.formatEther((this.prize).toString())
     }
   },
   props: {
@@ -84,13 +105,45 @@ export default {
             this.realStatus = 'finished'
             this.usergamebtn_txt = 'Claim'
             console.log(this.pool)
-            this.usergamebtn_secondary = ethers.utils.formatEther((this.prize).toString()) + ' tokens'
+            this.usergamebtn_secondary = Number(this.prizeInTokens).toFixed(2) + ' tokens'
         } else if (this.status == 2) {
             this.realStatus = 'readyToFinish'
             this.usergamebtn_txt = 'Finish'
         } else {
             this.realStatus = 'progress'
         }
+    },
+    async getPrizes() {
+        const contract = this.contract;
+        // const address = this.address;
+        const id = this.id;
+        console.log('101');
+        console.log(id);
+        console.log(contract.methods.getPrizes(id).call());
+        let prizesList = await contract.methods.getPrizes(id).call();
+        console.log(prizesList);
+        const winnersInfo = [];
+        const losersInfo = [];
+        console.log(prizesList['0']);
+        for (let i = 0; i < prizesList['0'].length; i++) {
+            if (prizesList['0'][i] > 0) {
+                winnersInfo.push({
+                    reward: Number(ethers.utils.formatEther((prizesList['0'][i]).toString())).toFixed(2),
+                    account: prizesList['1'][i].slice(0, 6) + '...' + prizesList['1'][i].slice(prizesList['1'][i].length - 4, prizesList['1'][i].length),
+                    bet: prizesList['2'][i]
+                })
+            }
+            else {
+                losersInfo.push({
+                    reward: 0,
+                    account: prizesList['1'][i].slice(0, 6) + '...' + prizesList['1'][i].slice(prizesList['1'][i].length - 4, prizesList['1'][i].length),
+                    bet: prizesList['2'][i],
+                })
+            }
+        }
+        let sortedWinners = winnersInfo.sort(({reward:a}, {reward:b}) => b-a);
+        this.winners = sortedWinners;
+        this.losers = losersInfo;
     },
     async handleFinishOrClaim() {
         const contract = this.contract;
@@ -161,11 +214,11 @@ export default {
 }
 
 .usergame_info {
-    width: 50%;
+    width: 65%;
 }
 
 .usergame-btn-wrapper {
-    width: 50%;
+    width: 35%;
     display: flex;
     flex-direction: row;
     justify-content: flex-end;
@@ -191,7 +244,7 @@ export default {
     display: flex;
     flex-direction: row;
     width: 100%;
-    margin: 9px;
+    margin: 17px;
 }
 
 .info-row-title {
@@ -235,6 +288,40 @@ export default {
 
 .orange {
     color: #F27C2F;
+}
+
+.playersrow_table {
+    width: 65%;
+}
+
+.player {
+    position: relative;
+    padding-left: 14px;
+}
+
+.player::before {
+    position: absolute;
+    content: '·';
+    left: 0;
+}
+.player, .table-title {
+    font-family: 'Orbitron';
+    font-style: normal;
+    font-weight: 800;
+    font-size: 15px;
+    line-height: 19px;
+    color: #000000;
+}
+
+.table-winners .table-title {
+    color: #84D06E;
+    margin-bottom: 4px;
+}
+
+.table-losers .table-title {
+    margin-top: 18px;
+    color: #FF5C5C;
+    margin-bottom: 4px;
 }
 
 @media screen and (max-width: 1000px) {

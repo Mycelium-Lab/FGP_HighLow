@@ -40,9 +40,10 @@
         :timestamp="game[1]"
         :participants="game[2]"
         :id="game[3]"
-        :owner="game[4]"
-        :joined="game[5]"
-        :chosenNumber="game[6]"
+        :limit="game[4]"
+        :owner="game[5]"
+        :joined="game[6]"
+        :chosenNumber="game[7]"
         />
       </div>
     </div>
@@ -138,9 +139,14 @@ h2 {
   font-size: 18px;
   line-height: 23px;
   text-decoration-line: underline;
+  transition: 0.2s;
   color: #F27C2F;
   margin-bottom: 78px;
   cursor: pointer;
+}
+h2:hover {
+  transition: 0.2s;
+  color: #000000;
 }
 .page {
   width: 100%;
@@ -181,6 +187,7 @@ h2 {
 
 .newgame-form-unit {
   margin: 16px;
+  margin-left: 0;
 }
 
 .newgame-form-unit span {
@@ -224,9 +231,27 @@ h2 {
   line-height: 25px;
   color: #FFFFFF;
   cursor: pointer;
+  text-shadow: 2px 3px 0px #000000;
   -webkit-box-shadow: 4px 4px 0px 0px rgba(255, 255, 255, 0.9);
   -moz-box-shadow: 4px 4px 0px 0px rgba(255, 255, 255, 0.9);
   box-shadow: 4px 4px 0px 0px rgba(255, 255, 255, 0.9);
+}
+
+.newgame-start:hover {
+  transition: 0.2s;
+  -webkit-box-shadow: 6px 6px 0px 0px rgba(255, 255, 255, 0.9);
+  -moz-box-shadow: 6px 6px 0px 0px rgba(255, 255, 255, 0.9);
+  box-shadow: 6px 6px 0px 0px rgba(255, 255, 255, 0.9);
+}
+
+.newgame-start:active {
+  transition: 0.1s;
+  color: black;
+  text-shadow: 2px 3px 0px #F2C94C;
+  border: 2px solid #000000;
+  -webkit-box-shadow: 6px 6px 0px 0px rgba(0, 0, 0, 0.9);
+  -moz-box-shadow: 6px 6px 0px 0px rgba(0, 0, 0, 0.9);
+  box-shadow: 6px 6px 0px 0px rgba(0, 0, 0, 0.9);
 }
 
 .currentgames-wrapper {
@@ -264,6 +289,10 @@ h2 {
     flex-direction: column;
     align-items: center;
     padding: 26px;
+  }
+
+  .newgame-form-unit {
+    margin-right: 0;
   }
 
   .newgame-start {

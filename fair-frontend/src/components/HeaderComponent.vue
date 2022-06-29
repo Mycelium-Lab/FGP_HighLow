@@ -37,6 +37,7 @@ export default {
 <style>
 header {
     padding-top: 2.5px;
+    margin-bottom: 2px;
     margin-top: 36px;
     width: 100%;
     display: flex;
@@ -67,9 +68,11 @@ nav {
     height: 100%;
 }
 .header-link {
-    height: 100%;
+    height: 51.5px;
+    max-height: 51.5px;
     padding: 14px;
-    padding-left: 28px;
+    padding-left: 46px;
+    padding-right: 0;
     text-decoration: none;
     font-family: 'Orbitron', sans-serif;
     font-weight: 700;
@@ -77,27 +80,37 @@ nav {
     box-sizing: border-box;
     position: relative;
     display: inline-block;
+    transition: 0.2s;
+}
+.header-link:hover {
+    transition: 0.2s;
+    color: #DF7F31 !important;
 }
 .header-link:first-child::after{
-    right: -12% !important;
+    right: -26% !important;
+}
+.header-link:nth-child(2)::after{
+    right: -19% !important;
 }
 .header-link:after {
     border: 3px solid #F27C2F;
 	position: absolute;
+    max-height: 51.5px;
 	z-index: -1;
 	content: "";
-	right: -9%;
-	top: -5%;
+    right: -17%;
+    top: -4%;
 	height: 100%;
 	width: 100%;
 	background-color: inherit;
-	-webkit-transform: skewX(-25deg);
-	-moz-transform: skewX(-25deg);
-	-ms-transform: skewX(-25deg);
-	transform: skewX(-25deg);
+	-webkit-transform: skewX(-45deg);
+	-moz-transform: skewX(-45deg);
+	-ms-transform: skewX(-45deg);
+	transform: skewX(-45deg);
 }
 .connect-btn {
     height: 100%;
+    height: 57px;
     padding: 18px;
     display: flex;
     flex-direction: row;
@@ -135,6 +148,7 @@ nav {
     color: #2C2F33;
 }
 .router-link-active {
+    transition: 0.2s;
     color: #DF7F31 !important;
 }
 .chainName {
@@ -156,16 +170,8 @@ nav {
     .header-link {
         font-size: 14px;
         line-height: 18px;
-        padding: 16px;
-        padding-left: 20px;
-    }
-
-    .header-link:first-child::after{
-        right: -15% !important;
-    }
-
-    .header-link:after {
-        right: -11%;
+        padding-top: 16px;
+        padding-right: 8px;
     }
 
     .connect-btn {

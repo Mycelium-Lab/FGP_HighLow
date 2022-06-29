@@ -185,17 +185,17 @@ export default {
     async getActualGames(contract, address) {
       const games = await contract.methods.getActualGames().call();
       const actualGamesList = [];
-      const chunkSize = 4;
+      const chunkSize = 5;
       for (let i = 0; i < games.length; i += chunkSize) {
         const chunk = games.slice(i, i + chunkSize);
-        chunk[4] = await contract.methods.getOwner(chunk[3]).call();
+        chunk[5] = await contract.methods.getOwner(chunk[3]).call();
         const index = this.pastGames.findIndex(obj => {return obj[4] === chunk[3]})
         if (index !== -1) {
-          chunk[5] = true
+          chunk[6] = true
           const res = await contract.methods.getBet(chunk[3], address).call();
-          chunk[6] = res
+          chunk[7] = res
         } else {
-          chunk[5] = false
+          chunk[6] = false
         }
         if (Number(chunk[1]) !== 0) {
             actualGamesList.push(chunk);
@@ -211,7 +211,7 @@ export default {
       for (let i = 0; i < result.length; i += chunkSize) {
           const chunk = result.slice(i, i + chunkSize);
           pastGamesList.push(chunk);
-          console.log(chunk)
+          // console.log(chunk)
       }
       await this.$store.commit('SET_PAST_GAMES', pastGamesList);
     },
@@ -241,14 +241,19 @@ a {
 * {
   margin: 0;
   padding: 0;
+  scrollbar-width: none;
+}
+
+*::-webkit-scrollbar {
+  display: none;
 }
 
 h1 {
   font-family: 'Press Start 2P';
   font-style: normal;
   font-weight: 400;
-  font-size: 14px;
-  line-height: 14px;
+  font-size: 25px;
+  line-height: 25px;
   color: #000000;
 }
 body {
