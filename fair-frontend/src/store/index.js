@@ -6,7 +6,7 @@ export default createStore({
     user: null,
     web3: null,
     balance: null,
-    fairAddress: "0x57789Cc8BF478F06a87fD90Ec0CE892BF54b29B2",
+    fairAddress: "0x95EAe369c81c97A8E035EDF569b0932Dfb9A8964",
     fairContract: null,
     pastGames: [],
     games: [],
@@ -60,19 +60,7 @@ export default createStore({
       const fairAddress = state.fairAddress;
       const fairContract = new state.web3.eth.Contract(Fair.abi, fairAddress);
       state.fairContract = fairContract;
-    },
-    // async fetchPastEvents ({state}) {
-    //   if (state.fairContract) {
-    //     const options = {
-    //       fromBlock: 0,
-    //       toBlock: 'latest'
-    //     }
-    //     console.log('weird')
-    //     state.fairContract.getPastEvents('GameCreated', options, function (error, events){console.log(events, error)})
-    //       .then(results => console.log(results))
-    //       //.catch(err => console.log(err));
-    //   }
-    // }
+    }
   },
   modules: {
   }

@@ -112,6 +112,9 @@ export default {
           if (transactionHash) {
             console.log(transactionHash);
           }
+          this.startgamenumber = '';
+          this.startgameplayercount = '';
+          this.startgamebid = '';
         });
       } catch(err) {
           console.log("error: ", err)

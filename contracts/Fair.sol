@@ -20,7 +20,7 @@ contract Fair {
         uint8 luckyNumber;
         uint256[] prizes;
         address[] winners;
-        uint256[] bets;
+        uint8[] bets;
     }
 
     struct Bid {
@@ -128,7 +128,6 @@ contract Fair {
                     prizeList[actualWinners[i]][_gameId].isWinner = true;
                     gamesList[_gameId].prizes.push(prizePiece);
                     gamesList[_gameId].winners.push(actualWinners[i]);
-                    // gamesList[_gameId].
                     prizePiece = prizePiece * 2;
                 }
                 prizeList[actualWinners[0]][_gameId].prize = prizePiece;
@@ -186,8 +185,8 @@ contract Fair {
 
     function getPrizes(uint256 _gameId) public view returns(uint256[] memory, address[] memory, uint256[] memory) {
         uint256[] memory bets = new uint256[](gamesList[_gameId].participants.length);
-        uint256[] memory rewards = new uint256[](gamesList[_gameId].prizes.length);
-        address[] memory players = new address[](gamesList[_gameId].winners.length);
+        uint256[] memory rewards = new uint256[](gamesList[_gameId].participants.length);
+        address[] memory players = new address[](gamesList[_gameId].participants.length);
         for (uint256 i = 0; i < gamesList[_gameId].participants.length; i++) {
             bets[i] = gamesList[_gameId].numbers[i];
             players[i] = gamesList[_gameId].participants[i];
@@ -228,7 +227,7 @@ contract Fair {
             } else if (!gamesList[currentGameId].isFinished && block.timestamp >= gamesList[currentGameId].createdTimestamp + 300) {
                 userGames[counter + 3] = 2; // the game is ready for finish
             } else {
-                userGames[counter + 3] = 0; // the game in progress
+                userGames[counter + 3] = 3; // the game in progress
             }
             counter += 8;
         }

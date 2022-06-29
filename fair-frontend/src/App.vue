@@ -211,7 +211,6 @@ export default {
       for (let i = 0; i < result.length; i += chunkSize) {
           const chunk = result.slice(i, i + chunkSize);
           pastGamesList.push(chunk);
-          // console.log(chunk)
       }
       await this.$store.commit('SET_PAST_GAMES', pastGamesList);
     },

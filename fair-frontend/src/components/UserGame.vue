@@ -1,5 +1,6 @@
 <template>
   <div class="usergame">
+    {{status}}
     <div class="usergame_info">
         <div v-if="luckyNumber != 0" class="usergame_info-row">
             <span class="info-row-title">Lucky number: </span><span class="info-row-value">{{luckyNumber}}</span>
@@ -13,7 +14,7 @@
         <div class="usergame_info-row">
             <span class="info-row-title">Players: </span><span class="info-row-value">{{timestampAsDate}}</span>
         </div>
-        <div class="usergame_info-row playersrow">
+        <div v-if="winners[0]" class="usergame_info-row playersrow">
             <div class="info-row-title"></div>
             <div class="playersrow_table">
                 <div class="table-winners">
@@ -64,6 +65,7 @@ export default {
   },
   created () {
     this.getStatus()
+    console.log(this.status);
     this.getPrizes()
   },
   computed: {
@@ -74,7 +76,7 @@ export default {
         return new Date(this.timestamp * 1000).toLocaleString('en-US')
     },
     wholePool: function() {
-        return this.bidInTokens * this.participants
+        return Number(this.bidInTokens * this.participants).toFixed(2)
     },
     contract: function() {
         return this.$store.state.fairContract
