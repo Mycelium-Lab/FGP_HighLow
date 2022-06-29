@@ -24,11 +24,6 @@ export default {
   components: {
     UserGame
   },
-  data () {
-    return {
-
-    }
-  },
   created() {
   },
   computed: {

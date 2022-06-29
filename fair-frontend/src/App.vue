@@ -86,7 +86,6 @@ export default {
       })
       let provider
       provider = await this.web3Modal.connect()
-      console.log(provider)
       this.metamaskProvider = new ethers.providers.Web3Provider(provider)
       await this.$store.dispatch('fetchFairContract', store.state)
       await this.checkMetamaskConnect().then(() => {
@@ -161,7 +160,6 @@ export default {
       this.subscribed = true
       const contract = this.contract
       const address = this.address
-      console.log(this.subscribed)
       setTimeout(async () => {
         this.getGamesInfinitely()
         await this.getUserGames(contract, address)
@@ -218,13 +216,11 @@ export default {
     async connectWallet() {
       if (this.metamaskProvider.provider._events.accountsChanged === undefined) {
         this.metamaskProvider.provider.on('accountsChanged', (accounts) => {
-          console.log(accounts[0])
           this.$store.commit('SET_USER', accounts[0])
         })
       }
       const address = (await this.metamaskProvider.listAccounts())[0]
       if (address !== null && address !== undefined) {
-        console.log(address)
         this.$store.commit('SET_USER', address)
       }
     }

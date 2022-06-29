@@ -78,7 +78,9 @@ contract Fair {
         require(biddersList[_gameId][msg.sender].participatedFlag == true, "Only participants can finish a game");
         if(gamesList[_gameId].participants.length == 1) {
             prizeList[msg.sender][_gameId].isWinner = true;
-            gamesList[_gameId].individualPrize = gamesList[_gameId].pool;
+            prizeList[msg.sender][_gameId].prize = gamesList[_gameId].pool;
+            gamesList[_gameId].winners.push(msg.sender);
+            gamesList[_gameId].prizes.push(gamesList[_gameId].pool);
         } else {
             uint8 randomNumber = generateRandom();
             gamesList[_gameId].luckyNumber = randomNumber;

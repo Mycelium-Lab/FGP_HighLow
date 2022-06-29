@@ -98,6 +98,10 @@ export default {
                 && this.joined === false
                 && this.bets.indexOf(number) === -1
             ) {
+                this.$store.commit('SET_MODAL', true)
+                this.$store.commit('SET_TITLE', 'Bid information')
+                this.$store.commit('SET_TYPE', 'info')
+                this.$store.commit('SET_CAPTION', 'Confirm this transaction in your wallet')
                 try{
                 await contract.methods.joinGame(id, BigNumber.from(number)).send({from: address, value: ethers.utils.parseEther((bid).toString())}, (err, transactionHash) => {
                     if (err) {

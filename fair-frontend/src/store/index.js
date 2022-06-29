@@ -6,7 +6,7 @@ export default createStore({
     user: null,
     web3: null,
     balance: null,
-    fairAddress: "0x95EAe369c81c97A8E035EDF569b0932Dfb9A8964",
+    fairAddress: "0xa2D0B73b125CBb666851c3B1511148A882Fa0328",
     fairContract: null,
     pastGames: [],
     games: [],
@@ -61,7 +61,5 @@ export default createStore({
       const fairContract = new state.web3.eth.Contract(Fair.abi, fairAddress);
       state.fairContract = fairContract;
     }
-  },
-  modules: {
   }
 })

@@ -22,7 +22,7 @@
                         <span class="account">{{winner.account}}: </span><span class="bet">bet on {{winner.bet}},</span><span class="reward"> won {{winner.reward}} tokens</span>
                     </div>
                 </div>
-                <div class="table-losers">
+                <div v-if="losers[0]" class="table-losers">
                     <div class="table-title">Losers: </div>
                     <div class="player loser" v-for="loser in losers" :key="loser.account">
                         <span class="account">{{loser.account}}: </span><span class="bet">bet on {{loser.bet}},</span><span class="reward"> won {{loser.reward}} tokens</span>
@@ -64,7 +64,6 @@ export default {
   },
   created () {
     this.getStatus()
-    console.log(this.status);
     this.getPrizes()
   },
   computed: {
@@ -116,16 +115,10 @@ export default {
     },
     async getPrizes() {
         const contract = this.contract;
-        // const address = this.address;
         const id = this.id;
-        console.log('101');
-        console.log(id);
-        console.log(contract.methods.getPrizes(id).call());
         let prizesList = await contract.methods.getPrizes(id).call();
-        console.log(prizesList);
         const winnersInfo = [];
         const losersInfo = [];
-        console.log(prizesList['0']);
         for (let i = 0; i < prizesList['0'].length; i++) {
             if (prizesList['0'][i] > 0) {
                 winnersInfo.push({
@@ -147,6 +140,10 @@ export default {
         this.losers = losersInfo;
     },
     async handleFinishOrClaim() {
+        this.$store.commit('SET_MODAL', true)
+        this.$store.commit('SET_TITLE', 'Bid information')
+        this.$store.commit('SET_TYPE', 'info')
+        this.$store.commit('SET_CAPTION', 'Confirm this transaction in your wallet')
         const contract = this.contract;
         const address = this.address;
         const id = this.id
@@ -160,18 +157,6 @@ export default {
                     }
                     if (transactionHash) {
                         console.log(transactionHash);
-                        try {
-                            await contract.methods.claim(id).send({from: address}, (err, transactionHash) => {
-                                if(err) {
-                                    console.log(err);
-                                }
-                                if(transactionHash) {
-                                    console.log(transactionHash)
-                                }
-                            })
-                        } catch(err) {
-                            console.log("error: ", err)
-                        }
                     }
                 });
             } catch(err) {
@@ -180,6 +165,10 @@ export default {
         } else if (window.ethereum && address && contract
         && this.realStatus === 'finished'
         ) {
+            this.$store.commit('SET_MODAL', true)
+            this.$store.commit('SET_TITLE', 'Bid information')
+            this.$store.commit('SET_TYPE', 'info')
+            this.$store.commit('SET_CAPTION', 'Confirm this transaction in your wallet')
             try {
                 await contract.methods.claim(id).send({from: address}, (err, transactionHash) => {
                     if(err) {
@@ -238,7 +227,22 @@ export default {
     -moz-box-shadow: 4px 4px 0px 0px rgba(0, 0, 0, 0.9);
     box-shadow: 4px 4px 0px 0px rgba(0, 0, 0, 0.9);
     padding: 12px 20px;
+    transition: 0.2s;
     cursor: pointer;
+}
+
+.usergame_btn:hover {
+    transition: 0.2s;
+    -webkit-box-shadow: 6px 6px 0px 0px rgba(0, 0, 0, 0.9);
+    -moz-box-shadow: 6px 6px 0px 0px rgba(0, 0, 0, 0.9);
+    box-shadow: 6px 6px 0px 0px rgba(0, 0, 0, 0.9);
+}
+
+.usergame_btn:active {
+    -webkit-box-shadow: 6px 6px 0px 0px rgba(0, 0, 0, 0.9);
+    -moz-box-shadow: 6px 6px 0px 0px rgba(0, 0, 0, 0.9);
+    box-shadow: 6px 6px 0px 0px rgba(0, 0, 0, 0.9);
+    background: #F27C2F;
 }
 
 .usergame_info-row {

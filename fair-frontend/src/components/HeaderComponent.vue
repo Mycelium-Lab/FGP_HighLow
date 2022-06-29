@@ -47,7 +47,6 @@ header {
     height: 54px;
     box-sizing: border-box;
     position: relative;
-    /*border: 3px solid #F27C2F;*/
 }
 header::before {
     content: "";
@@ -99,7 +98,7 @@ nav {
 	z-index: -1;
 	content: "";
     right: -17%;
-    top: -4%;
+    top: -5%;
 	height: 100%;
 	width: 100%;
 	background-color: inherit;
@@ -192,12 +191,53 @@ nav {
     }
 }
 
-@media screen and (max-width: 400px) {
+@media screen and (max-width: 460px) {
     .header-link {
-        font-size: 12px;
+        font-size: 10px;
         line-height: 18px;
-        padding: 16px;
-        padding-left: 20px;
+        padding: 15px;
+        padding-right: 14px;
+        padding-left: 26px;
+    }
+
+    .nav, header {
+        height: 31.5px;
+    }
+
+    header {
+        background-color: #F5F5F5;
+        z-index: 1001;
+        margin-bottom: 0;
+    }
+
+    .header-link:first-child::after{
+        right: -12% !important;
+    }
+    .header-link:nth-child(2)::after{
+        right: -10% !important;
+    }
+    .header-link:after {
+        border: 3px solid #F27C2F;
+        position: absolute;
+        max-height: 28.5px;
+        z-index: -1;
+        content: "";
+        right: -17%;
+        top: 17%;
+        height: 100%;
+        width: 100%;
+        background-color: inherit;
+        -webkit-transform: skewX(-30deg);
+        -moz-transform: skewX(-30deg);
+        -ms-transform: skewX(-30deg);
+        transform: skewX(-30deg);
+    }
+
+    .connect-btn {
+        max-height: 17.5px;
+        padding: 6px 4px;
+        box-sizing: content-box;
+        height: 25.5px !important;
     }
 }
 </style>

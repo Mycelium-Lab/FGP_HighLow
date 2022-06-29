@@ -28,6 +28,7 @@
 
 <script>
 import store from '../store'
+import emitter from '../main'
 
 export default {
     name: 'CustomModal',
@@ -50,8 +51,6 @@ export default {
             return this.$store.state.modal
         }
     },
-    props: {
-    },
     methods: {
         handleClose() {
             this.$store.commit('SET_MODAL', false)
@@ -59,7 +58,9 @@ export default {
             this.$store.commit('SET_TYPE', '')
             this.$store.commit('SET_CAPTION', '')
         },
-        confirmNewBet() {}
+        confirmNewBet() {
+            emitter.emit('confirmNewGame')
+        }
     }
 }
 </script>
@@ -77,6 +78,7 @@ h2 {
     font-size: 20px;
     line-height: 25px;
     color: #2C2F33;
+    text-align: center;
 }
 .modal {
     display: none;
@@ -92,6 +94,7 @@ h2 {
     background-color: rgba(0,0,0,0.3)
 }
 .modal-box {
+    z-index: 1050;
     max-width: 1010px;
     margin-top: 128px;
     display: flex;
@@ -194,8 +197,20 @@ h2 {
 
 
 @media screen and (max-width: 1000px) {
+    h1 {
+        font-size: 16px !important;
+    }
+
+    h2 {
+        font-size: 14px !important;
+    }
+
     .modal-box {
         max-width: 90%;
+    }
+
+    .maskot {
+        width: 50%;
     }
 
     .modal-rule {

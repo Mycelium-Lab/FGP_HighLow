@@ -26,7 +26,7 @@
             </select>
           </div>
         </div>
-        <button @click="handleCreate()" class="newgame-start">
+        <button @click="promptCreate()" class="newgame-start">
           PLAY
         </button>
       </div>
@@ -54,6 +54,7 @@
 import ActiveGame from './ActiveGame.vue'
 import {ethers, BigNumber} from 'ethers'
 import store from '../store'
+import emitter from '../main'
 
 export default {
   name: 'CurrentGame',
@@ -86,6 +87,11 @@ export default {
       return this.$store.state.games;
     }
   },
+  created() {
+    emitter.on('confirmNewGame', () => {
+      this.handleCreate();
+    })
+  },
   methods: {
     async promptCreate() {
       if (window.ethereum && this.address 
@@ -99,6 +105,10 @@ export default {
       }
     },
     async handleCreate() {
+      this.$store.commit('SET_MODAL', true)
+      this.$store.commit('SET_TITLE', 'Bid information')
+      this.$store.commit('SET_TYPE', 'info')
+      this.$store.commit('SET_CAPTION', 'Confirm this transaction in your wallet')
       const contract = this.contract;
       const address = this.address;
       const number = this.startgamenumber;
@@ -304,6 +314,12 @@ h2:hover {
 
   .currentgames-wrapper {
     padding: 14px;
+  }
+}
+
+@media screen and (max-width: 400px) {
+  h1 {
+    font-size: 18px;
   }
 }
 </style>
