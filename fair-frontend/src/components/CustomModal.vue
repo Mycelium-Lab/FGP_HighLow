@@ -94,6 +94,7 @@ h2 {
 }
 .modal {
     display: none;
+    overflow-y: scroll;
 }
 .modalActive {
     display: flex;
@@ -102,7 +103,8 @@ h2 {
     align-items: flex-start;
     position: absolute;
     width: 100%;
-    min-height: 100%;
+    min-height: 100vh;
+    height: 100%;
     background-color: rgba(0,0,0,0.3)
 }
 .modal-box {

@@ -5,7 +5,7 @@
                 <span class="info_row-title">Bid: </span><span class="info_row-value">{{bidInTokens}} ROSE</span>
             </div>
             <div class="info_row">
-                <span class="info_row-title">Before the start: </span><span class="info_row-value">{{timeToFinish}}</span>
+                <span class="info_row-title">Before the start: </span><span class="info_row-value">{{timeToFinish}} s</span>
             </div>
             <div class="info_row">
                 <span class="info_row-title">Number of players: </span><span class="info_row-value">{{participants}} / {{processedLimit}}</span>
@@ -21,7 +21,7 @@
             </div>
         </div>
         <div class="button-wrapper">
-            <button v-bind:class="{joinbtndisabled: ownedGame === true || participants == limit, joinbtnwaiting: ownedGame === false && joined === true}" @click="handleJoin()" class="join_btn">{{joinbtn_text}}</button>
+            <button v-bind:class="{joinbtndisabled: ownedGame === true || participants == limit, joinbtnwaiting: ownedGame === false && joined === true}" @click="handleJoin()" class="join_btn">{{joinBtnText}}</button>
         </div>
     </div>
 </template>
@@ -37,7 +37,6 @@ export default {
             currentTime: Date.now(),
             number: '',
             joinbtn_text: '',
-            ownedGame: false,
             bets: []
         }
     },
@@ -52,8 +51,9 @@ export default {
         limit: String
     },
     created() {
-        this.setJoinBtnText();
-        this.getBets();
+        if (this.owner) {
+            this.getBets();
+        }
     },
     computed: {
         web3: function() {
@@ -85,6 +85,22 @@ export default {
             } else {
                 return 0
             }
+        },
+        ownedGame: function() {
+            if (this.owner === this.address) {
+                return true
+            } else {
+                return false
+            }
+        },
+        joinBtnText: function() {
+            if (this.owner === this.address) {
+                return 'Your game';
+            } else if (this.joined === false && this.timeToFinish > 0) {
+                return 'Join';
+            } else if (this.joined === true) {
+                return 'Waiting'
+            } else return ''
         }
     },
     methods: {
@@ -121,16 +137,6 @@ export default {
                 } catch(err) {
                     console.log("error: ", err)
                 }
-            }
-        },
-        setJoinBtnText: function () {
-            if (this.owner === this.address) {
-                this.joinbtn_text = 'Your game';
-                this.ownedGame = true;
-            } else if (this.joined === false && this.timeToFinish > 0) {
-                this.joinbtn_text = 'Join'
-            } else if (this.joined === true) {
-                this.joinbtn_text = 'Waiting'
             }
         },
         getBets: async function() {

@@ -1,8 +1,10 @@
 <template>
-  <div class="fair-home">
-    <HeaderComponent></HeaderComponent>
+  <div class="fair-home-wrapper">
+    <div class="fair-home">
+      <HeaderComponent></HeaderComponent>
+      <router-view/>
+    </div>
     <CustomModal></CustomModal>
-    <router-view/>
   </div>
 </template>
 
@@ -183,7 +185,6 @@ export default {
     async getActualGames(contract, address) {
       const games = await contract.methods.getActualGames().call();
       const actualGamesList = [];
-      const empty = [];
       const chunkSize = 5;
       for (let i = 0; i < games.length; i += chunkSize) {
         const chunk = games.slice(i, i + chunkSize);
@@ -200,20 +201,29 @@ export default {
             actualGamesList.push(chunk);
         }
       }
-      await this.$store.commit('SET_GAMES', empty);
+      const emptiedGamesList = [];
+      for (let i = 0; i < actualGamesList.length; i++) {
+        const arr = []
+        emptiedGamesList.push(arr)
+      }
+      await this.$store.commit('SET_GAMES', emptiedGamesList);
       await this.$store.commit('SET_GAMES', actualGamesList);
     },
 
     async getUserGames (contract, address) {
       let result = await contract.methods.getUserGames(address).call();
       const pastGamesList = [];
-      const empty = []
       const chunkSize = 8;
       for (let i = 0; i < result.length; i += chunkSize) {
           const chunk = result.slice(i, i + chunkSize);
           pastGamesList.push(chunk);
       }
-      await this.$store.commit('SET_PAST_GAMES', empty)
+      const emptiedGamesList = [];
+      for (let i = 0; i < pastGamesList.length; i++) {
+        const arr = []
+        emptiedGamesList.push(arr)
+      }
+      await this.$store.commit('SET_PAST_GAMES', emptiedGamesList)
       await this.$store.commit('SET_PAST_GAMES', pastGamesList);
     },
 
@@ -240,7 +250,7 @@ a {
 * {
   margin: 0;
   padding: 0;
-  scrollbar-width: none;
+  /*scrollbar-width: none;*/
 }
 
 *::-webkit-scrollbar {
@@ -262,13 +272,23 @@ body {
 #app {
   position: relative;
   width: 100%;
+  height: 100%;
   display: flex;
   flex-direction: row;
   justify-content: center;
   align-items: center;
 }
 
+.fair-home-wrapper {
+  width: calc(100vw - 70px);
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 .fair-home {
+  position: relative;
   display: flex;
   flex-direction: column;
   width: calc(100% - 70px);

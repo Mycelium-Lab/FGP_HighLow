@@ -10,10 +10,10 @@
         <div class="usergame_info-row">
             <span class="info-row-title">Datetime: </span><span class="info-row-value">{{timestampAsDate}}</span>
         </div>
-        <div class="usergame_info-row">
-            <span class="info-row-title">Players: </span><span class="info-row-value">{{timestampAsDate}}</span>
+        <div @click="toggleWinnersShown()" class="usergame_info-row playercountrow">
+            <span class="info-row-title">Players: </span><span class="info-row-value">Total: {{participants}}, <span>Winners: {{winners.length}}, </span><img v-bind:class="{opened: winnersShown}" src="../assets/icons/triangle.png"/></span>
         </div>
-        <div v-if="winners[0]" class="usergame_info-row playersrow">
+        <div v-if="winnersShown" class="usergame_info-row playersrow">
             <div class="info-row-title"></div>
             <div class="playersrow_table">
                 <div class="table-winners">
@@ -60,16 +60,21 @@ export default {
         usergamebtn_secondary: '',
         playersData: [],
         winners: [],
-        losers: []
+        losers: [],
+        winnersShown: false
     }
   },
   created () {
-    this.getStatus()
-    this.getPrizes()
+    if (this.timestamp) {
+        this.getStatus()
+        this.getPrizes()
+    }
   },
   computed: {
     bidInTokens: function() {
-        return ethers.utils.formatEther(this.bid)
+        if (this.bid) {
+            return ethers.utils.formatEther(this.bid)
+        } else return 0
     },
     timestampAsDate: function() {
         return new Date(this.timestamp * 1000).toLocaleString('en-US')
@@ -98,6 +103,9 @@ export default {
     prize: String
   },
   methods: {
+    toggleWinnersShown() {
+        this.winnersShown = !this.winnersShown
+    },
     getStatus() {
         if (this.status == 0) {
             this.realStatus = 'claimed'
@@ -306,6 +314,11 @@ export default {
     color: #F27C2F;
 }
 
+.playercountrow .info-row-value {
+    cursor: pointer;
+    text-decoration: underline;
+}
+
 .playersrow_table {
     width: 65%;
 }
@@ -338,6 +351,10 @@ export default {
     margin-top: 18px;
     color: #FF5C5C;
     margin-bottom: 4px;
+}
+
+.opened {
+    transform: rotate(180deg)
 }
 
 @media screen and (max-width: 1000px) {
