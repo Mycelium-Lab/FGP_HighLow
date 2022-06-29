@@ -1,6 +1,5 @@
 <template>
   <div class="usergame">
-    {{status}}
     <div class="usergame_info">
         <div v-if="luckyNumber != 0" class="usergame_info-row">
             <span class="info-row-title">Lucky number: </span><span class="info-row-value">{{luckyNumber}}</span>
