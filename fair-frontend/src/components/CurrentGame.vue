@@ -120,11 +120,17 @@ export default {
             console.log(err);
           }
           if (transactionHash) {
+            emitter.emit('animateProgressBar')
             console.log(transactionHash);
           }
           this.startgamenumber = '';
           this.startgameplayercount = '';
           this.startgamebid = '';
+        }).then(() => {
+          this.$store.commit('SET_MODAL', false)
+          this.$store.commit('SET_TITLE', '')
+          this.$store.commit('SET_TYPE', '')
+          this.$store.commit('SET_CAPTION', '')
         });
       } catch(err) {
           console.log("error: ", err)

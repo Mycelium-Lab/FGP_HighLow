@@ -16,7 +16,8 @@
                     <span class="modal-rule modal-specialrule">The winners are 30% of users who made the closest bet to the number chosen by the computer (but not less than 1 person), the rest - lost.</span>
                     <span class="modal-rule">5. Bets made by users form a prize pool. At the end of the game the prize pool is distributed equally among the winners.</span>
                 </div>
-                <img class="maskot" v-if="modalType === 'rules'||modalType === 'info'" src="../assets/maskot.png">
+                <img class="maskot" v-if="modalType === 'rules'||(modalType === 'info' && this.inProgress === false)" src="../assets/maskot.png">
+                <img class="load" v-else-if="modalType === 'info' && this.inProgress === true" src="../assets/icons/time.png">
                 <div v-if="modalType === 'confirm'" class="button-wrapper">
                     <button @click="handleClose()" class="modalbtn">NO</button>
                     <button @click="confirmNewBet()" class="modalbtn orange">YES</button>
@@ -35,7 +36,13 @@ export default {
     store,
     data () {
         return {
+            inProgress: false
         }
+    },
+    created() {
+        emitter.on('animateProgressBar', () => {
+            this.progress();
+        })
     },
     computed: {
         modalTitle: function() {
@@ -60,6 +67,11 @@ export default {
         },
         confirmNewBet() {
             emitter.emit('confirmNewGame')
+        },
+        progress() {
+            console.log(this.inProgress)
+            this.inProgress = true
+            console.log(this.inProgress)
         }
     }
 }
@@ -151,6 +163,23 @@ h2 {
 
 .modal-rule::first-letter {
     color: #F27C2F;
+}
+
+.load {
+    margin-top: 32px;
+    animation: spin 1s infinite ease-in-out;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    50% {
+        transform: rotate(180deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
 }
 
 .maskot {

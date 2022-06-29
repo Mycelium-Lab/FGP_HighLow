@@ -183,6 +183,7 @@ export default {
     async getActualGames(contract, address) {
       const games = await contract.methods.getActualGames().call();
       const actualGamesList = [];
+      const empty = [];
       const chunkSize = 5;
       for (let i = 0; i < games.length; i += chunkSize) {
         const chunk = games.slice(i, i + chunkSize);
@@ -199,17 +200,20 @@ export default {
             actualGamesList.push(chunk);
         }
       }
+      await this.$store.commit('SET_GAMES', empty);
       await this.$store.commit('SET_GAMES', actualGamesList);
     },
 
     async getUserGames (contract, address) {
       let result = await contract.methods.getUserGames(address).call();
       const pastGamesList = [];
+      const empty = []
       const chunkSize = 8;
       for (let i = 0; i < result.length; i += chunkSize) {
           const chunk = result.slice(i, i + chunkSize);
           pastGamesList.push(chunk);
       }
+      await this.$store.commit('SET_PAST_GAMES', empty)
       await this.$store.commit('SET_PAST_GAMES', pastGamesList);
     },
 

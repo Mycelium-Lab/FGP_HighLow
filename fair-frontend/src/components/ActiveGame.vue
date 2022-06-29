@@ -1,5 +1,5 @@
 <template>
-    <div class="currentgame">
+    <div v-if="timeToFinish > 0 || joined === true" class="currentgame">
         <div class="currentgame_info">
             <div class="info_row">
                 <span class="info_row-title">Bid: </span><span class="info_row-value">{{bidInTokens}} ROSE</span>
@@ -28,6 +28,7 @@
 
 <script>
 import {BigNumber, ethers} from 'ethers'
+import emitter from '../main'
 
 export default {
     name: 'ActiveGame',
@@ -108,8 +109,14 @@ export default {
                     console.log(err);
                     }
                     if (transactionHash) {
+                    emitter.emit('animateProgressBar')
                     console.log(transactionHash);
                     }
+                }).then(() => {
+                    this.$store.commit('SET_MODAL', false)
+                    this.$store.commit('SET_TITLE', '')
+                    this.$store.commit('SET_TYPE', '')
+                    this.$store.commit('SET_CAPTION', '')
                 });
                 } catch(err) {
                     console.log("error: ", err)
@@ -120,9 +127,9 @@ export default {
             if (this.owner === this.address) {
                 this.joinbtn_text = 'Your game';
                 this.ownedGame = true;
-            } else if (this.joined === false) {
+            } else if (this.joined === false && this.timeToFinish > 0) {
                 this.joinbtn_text = 'Join'
-            } else {
+            } else if (this.joined === true) {
                 this.joinbtn_text = 'Waiting'
             }
         },
@@ -148,6 +155,7 @@ export default {
     padding: 42px 46px;
     max-width: 500px;
     width: 100%;
+    min-height: 295px;
     box-sizing: border-box;
 }
 
@@ -252,6 +260,7 @@ export default {
 @media screen and (max-width: 600px) {
     .currentgame {
         padding: 16px 24px;
+        min-height: 166px;
     }
 
     .join_btn {

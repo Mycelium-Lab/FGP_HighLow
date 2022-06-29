@@ -46,6 +46,7 @@
 <script>
 import {ethers} from 'ethers'
 import store from '../store'
+import emitter from '../main'
 
 export default {
   name: 'UserGame',
@@ -100,11 +101,9 @@ export default {
     getStatus() {
         if (this.status == 0) {
             this.realStatus = 'claimed'
-            console.log(this.status, this.luckyNumber)
         } else if (this.status == 1) {
             this.realStatus = 'finished'
             this.usergamebtn_txt = 'Claim'
-            console.log(this.pool)
             this.usergamebtn_secondary = Number(this.prizeInTokens).toFixed(2) + ' tokens'
         } else if (this.status == 2) {
             this.realStatus = 'readyToFinish'
@@ -156,8 +155,14 @@ export default {
                         console.log(err);
                     }
                     if (transactionHash) {
-                        console.log(transactionHash);
+                        emitter.emit('animateProgressBar')
+                        console.log(transactionHash);  
                     }
+                }).then(() => {
+                    this.$store.commit('SET_MODAL', false)
+                    this.$store.commit('SET_TITLE', '')
+                    this.$store.commit('SET_TYPE', '')
+                    this.$store.commit('SET_CAPTION', '')
                 });
             } catch(err) {
                 console.log("error: ", err)
@@ -183,6 +188,11 @@ export default {
             }
         }
     }
+  },
+  watch: {
+      timestamp: function() {
+          console.log('timestamp changed');
+      }
   }
 }
 </script>
@@ -201,6 +211,7 @@ export default {
     min-width: 80%;
     margin-bottom: 28px;
     padding: 40px 50px;
+    transition: 0.3s;
 }
 
 .usergame_info {
