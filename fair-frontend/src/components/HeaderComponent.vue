@@ -3,7 +3,7 @@
     <nav>
         <router-link class="header-link" to="/">Game</router-link>
         <router-link class="header-link" to="/past">Past games</router-link>
-        <router-link class="header-link" to="/current">Current games</router-link>
+        <router-link class="header-link noActiveState" :to="{ path: '/', hash: '#current' }">Current games</router-link>
     </nav>
     <div class="filler">
     </div>
@@ -28,6 +28,11 @@ export default {
     },
     currentChain: function() {
       return this.$store.state.web3.currentProvider.chainId;
+    }
+  },
+  methods: {
+    toCurrentGames() {
+        this.$router.push({ name: 'default', hash: '#current' })
     }
   }
 }
@@ -149,6 +154,9 @@ nav {
 .router-link-active {
     transition: 0.2s;
     color: #DF7F31 !important;
+}
+.router-link-active.noActiveState {
+    color: #2C2F33 !important;
 }
 .chainName {
     font-family: 'Orbitron';

@@ -5,10 +5,10 @@
       <div class="newgame">
         <div class="newgame-form">
           <div class="newgame-form-unit">
-            <span>Guess a number</span><input v-model="startgamenumber" type="text"/>
+            <span>Guess a number</span><input pattern="[0,9]{1,3}" v-model="startgamenumber" type="number"/>
           </div>
           <div class="newgame-form-unit">
-            <span>Your bid</span><input v-model="startgamebid" type="text"/><span>ROSE</span>
+            <span>Your bid</span><input v-model="startgamebid" type="number"/><span>ROSE</span>
           </div>
           <div class="newgame-form-unit">
             <span>Limit of players</span>
@@ -95,6 +95,7 @@ export default {
   methods: {
     async promptCreate() {
       if (window.ethereum && this.address 
+          && (this.bid != 0)
           && (this.startgamenumber > 0 && this.startgamenumber < 101) 
           && (this.startgameplayercount > -1 && this.startgameplayercount < 11 && this.startgameplayercount !== 1)
       ) {
@@ -114,30 +115,35 @@ export default {
       const number = this.startgamenumber;
       const limit = this.startgameplayercount;
       const bid = this.startgamebid
-      try{
-        await contract.methods.createGame(BigNumber.from(number), BigNumber.from(limit)).send({from: address, value: ethers.utils.parseEther((bid).toString())}, (err, transactionHash) => {
-          if (err) {
+      if (window.ethereum && this.address 
+          && (number > 0 && number < 101) 
+          && (limit > -1 && limit < 11 && limit !== 1)
+      ) {
+        try{
+          await contract.methods.createGame(BigNumber.from(number), BigNumber.from(limit)).send({from: address, value: ethers.utils.parseEther((bid).toString())}, (err, transactionHash) => {
+            if (err) {
+              this.$store.commit('SET_MODAL', false)
+              this.$store.commit('SET_TITLE', '')
+              this.$store.commit('SET_TYPE', '')
+              this.$store.commit('SET_CAPTION', '')
+              console.log(err);
+            }
+            if (transactionHash) {
+              emitter.emit('animateProgressBar')
+              console.log(transactionHash);
+            }
+            this.startgamenumber = '';
+            this.startgameplayercount = 0;
+            this.startgamebid = '';
+          }).then(() => {
             this.$store.commit('SET_MODAL', false)
             this.$store.commit('SET_TITLE', '')
             this.$store.commit('SET_TYPE', '')
             this.$store.commit('SET_CAPTION', '')
-            console.log(err);
-          }
-          if (transactionHash) {
-            emitter.emit('animateProgressBar')
-            console.log(transactionHash);
-          }
-          this.startgamenumber = '';
-          this.startgameplayercount = 0;
-          this.startgamebid = '';
-        }).then(() => {
-          this.$store.commit('SET_MODAL', false)
-          this.$store.commit('SET_TITLE', '')
-          this.$store.commit('SET_TYPE', '')
-          this.$store.commit('SET_CAPTION', '')
-        });
-      } catch(err) {
-          console.log("error: ", err)
+          });
+        } catch(err) {
+            console.log("error: ", err)
+        }
       }
     },
     openRules() {

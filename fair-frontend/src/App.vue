@@ -129,7 +129,29 @@ export default {
               location.reload()
             });
           } catch (error) {
-            alert(error.message);
+            if (typeof window !== 'undefined') {
+                window.ethereum.request({
+                    jsonrpc: '2.0',
+                    method: 'wallet_addEthereumChain',
+                    params: [
+                        {
+                            chainId: '0xa515',
+                            chainName: 'Emerald Paratime Testnet',
+                            rpcUrls: ['https://testnet.emerald.oasis.dev/'],
+                            nativeCurrency: {
+                                name: 'ROSE',
+                                symbol: 'ROSE',
+                                decimals: 18
+                            },
+                            blockExplorerUrls: ['https://bscscan.com']
+                        }
+                    ],
+                    id: 0
+                }).then(() => {
+                  location.reload()
+                });
+            }
+            // alert(error.message);
           }
         }
       } else {
@@ -333,6 +355,7 @@ body {
 
 @media screen and (max-width: 600px) {
   .fair-home {
+    margin-top: 64px;
     width: calc(100% - 16px)
   }
 
