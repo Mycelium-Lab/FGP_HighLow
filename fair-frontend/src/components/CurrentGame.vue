@@ -13,7 +13,7 @@
           <div class="newgame-form-unit">
             <span>Limit of players</span>
             <select v-model="startgameplayercount">
-              <option value="0">Unlimited</option>
+              <option selected="selected" value="0">Unlimited</option>
               <option>2</option>
               <option>3</option>
               <option>4</option>
@@ -32,7 +32,7 @@
       </div>
       <h2 @click="openRules()">Game rules</h2>
     </div>
-    <div v-if="games[0]" class="currentgames-wrapper">
+    <div id="#current" v-if="games[0]" class="currentgames-wrapper">
       <h1>Current games</h1>
       <div id="currentGames" class="currentgames">
         <ActiveGame class="activegame" v-for="game in games" :key="game[3]"
@@ -67,7 +67,7 @@ export default {
       abi: null,
       startgamenumber: '',
       startgamebid: '',
-      startgameplayercount: ''
+      startgameplayercount: 0
     }
   },
   computed: {
@@ -117,6 +117,10 @@ export default {
       try{
         await contract.methods.createGame(BigNumber.from(number), BigNumber.from(limit)).send({from: address, value: ethers.utils.parseEther((bid).toString())}, (err, transactionHash) => {
           if (err) {
+            this.$store.commit('SET_MODAL', false)
+            this.$store.commit('SET_TITLE', '')
+            this.$store.commit('SET_TYPE', '')
+            this.$store.commit('SET_CAPTION', '')
             console.log(err);
           }
           if (transactionHash) {
@@ -124,7 +128,7 @@ export default {
             console.log(transactionHash);
           }
           this.startgamenumber = '';
-          this.startgameplayercount = '';
+          this.startgameplayercount = 0;
           this.startgamebid = '';
         }).then(() => {
           this.$store.commit('SET_MODAL', false)
@@ -323,9 +327,37 @@ h2:hover {
   }
 }
 
+@media screen and (max-width: 450px) {
+  .newgame {
+    padding: 20px;
+  }
+
+  .newgame-form-unit {
+    margin-top: 8px;
+    margin-bottom: 8px;
+  }
+
+  .newgame-form-unit span {
+    font-size: 10px;
+  }
+
+  .newgame-form-unit input {
+    font-size: 10px;
+  }
+
+  .newgame-form-unit select {
+    font-size: 12px;
+  }
+
+  .newgame-start {
+    margin-top: 24px;
+    padding: 25px 54px;
+  }
+}
+
 @media screen and (max-width: 400px) {
   h1 {
-    font-size: 18px;
+    font-size: 14px;
   }
 }
 </style>

@@ -16,13 +16,13 @@
         <div v-if="winnersShown" class="usergame_info-row playersrow">
             <div class="info-row-title"></div>
             <div class="playersrow_table">
-                <div class="table-winners">
+                <div v-if="winners[0]" class="table-winners">
                     <div class="table-title">Winners: </div>
                     <div class="player winner" v-for="winner in winners" :key="winner.account">
                         <span class="account">{{winner.account}}: </span><span class="bet">bet on {{winner.bet}},</span><span class="reward"> won {{winner.reward}} tokens</span>
                     </div>
                 </div>
-                <div v-if="losers[0]" class="table-losers">
+                <div v-if="winners[0] && losers[0]" class="table-losers">
                     <div class="table-title">Losers: </div>
                     <div class="player loser" v-for="loser in losers" :key="loser.account">
                         <span class="account">{{loser.account}}: </span><span class="bet">bet on {{loser.bet}},</span><span class="reward"> won {{loser.reward}} tokens</span>
@@ -60,8 +60,7 @@ export default {
         usergamebtn_secondary: '',
         playersData: [],
         winners: [],
-        losers: [],
-        winnersShown: false
+        losers: []
     }
   },
   created () {
@@ -71,6 +70,11 @@ export default {
     }
   },
   computed: {
+    winnersShown: function() {
+        if (this.$store.state.winnersShown == this.id) {
+            return true
+        } else return false
+    },
     bidInTokens: function() {
         if (this.bid) {
             return ethers.utils.formatEther(this.bid)
@@ -104,7 +108,11 @@ export default {
   },
   methods: {
     toggleWinnersShown() {
-        this.winnersShown = !this.winnersShown
+        if (this.winnersShown) {
+            this.$store.commit('SET_WINNERSSHOWN', null)
+        } else {
+            this.$store.commit('SET_WINNERSSHOWN', this.id)
+        }
     },
     getStatus() {
         if (this.status == 0) {
@@ -134,7 +142,7 @@ export default {
                     bet: prizesList['2'][i]
                 })
             }
-            else {
+            else if (prizesList['1'][i] != 0) {
                 losersInfo.push({
                     reward: 0,
                     account: prizesList['1'][i].slice(0, 6) + '...' + prizesList['1'][i].slice(prizesList['1'][i].length - 4, prizesList['1'][i].length),
@@ -160,6 +168,10 @@ export default {
             try {
                 await contract.methods.finishGame(id).send({from: address}, async (err, transactionHash) => {
                     if (err) {
+                        this.$store.commit('SET_MODAL', false)
+                        this.$store.commit('SET_TITLE', '')
+                        this.$store.commit('SET_TYPE', '')
+                        this.$store.commit('SET_CAPTION', '')
                         console.log(err);
                     }
                     if (transactionHash) {
@@ -186,10 +198,20 @@ export default {
                 await contract.methods.claim(id).send({from: address}, (err, transactionHash) => {
                     if(err) {
                         console.log(err);
+                        this.$store.commit('SET_MODAL', false)
+                        this.$store.commit('SET_TITLE', '')
+                        this.$store.commit('SET_TYPE', '')
+                        this.$store.commit('SET_CAPTION', '')
                     }
                     if(transactionHash) {
+                        emitter.emit('animateProgressBar')
                         console.log(transactionHash)
                     }
+                }).then(() => {
+                    this.$store.commit('SET_MODAL', false)
+                    this.$store.commit('SET_TITLE', '')
+                    this.$store.commit('SET_TYPE', '')
+                    this.$store.commit('SET_CAPTION', '')
                 })
             } catch(err) {
                 console.log("error: ", err)
@@ -410,5 +432,10 @@ export default {
         font-size: 10px;
         line-height: 10px;
     }
+
+    .player, .table-title {
+        font-size: 10px;
+        line-height: 13px;
+}
 }
 </style>

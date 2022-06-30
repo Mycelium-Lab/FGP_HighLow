@@ -95,13 +95,14 @@ h2 {
 .modal {
     display: none;
     overflow-y: scroll;
+    z-index: 1000;
 }
 .modalActive {
     display: flex;
     flex-direction: row;
     justify-content: center;
     align-items: flex-start;
-    position: absolute;
+    position: fixed;
     width: 100%;
     min-height: 100vh;
     height: 100%;
@@ -111,15 +112,14 @@ h2 {
     z-index: 1050;
     max-width: 1010px;
     margin-top: 128px;
+    margin-bottom: 128px;
     display: flex;
     flex-direction: column;
     align-items: center;
     min-width: 75%;
     background: #ffffff;
     min-height: 300px;
-    border: 8px solid #000000;
-    padding-bottom: 92px;
-}
+    border: 8px solid #000000;}
 
 .modal-header {
     padding: 14px;
@@ -137,6 +137,7 @@ h2 {
 .modal-body {
     padding-left: 5%;
     padding-right: 5%;
+    height: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -186,6 +187,7 @@ h2 {
 
 .maskot {
     margin-top: 32px;
+    margin-bottom: 64px;
 }
 
 .closebtn {

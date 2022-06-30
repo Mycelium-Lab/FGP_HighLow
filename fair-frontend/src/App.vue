@@ -100,6 +100,7 @@ export default {
           const provider = new ethers.providers.Web3Provider(window.ethereum);
           const isMetaMaskConnected = async () => {
             let accounts = await provider.listAccounts();
+            console.log(accounts)
             if(accounts.length> 0)
             {
               this.account = accounts[0]
@@ -124,11 +125,12 @@ export default {
             await this.web3.currentProvider.request({
               method: "wallet_switchEthereumChain",
               params: [{ chainId: network.chainId }]
+            }).then(() => {
+              location.reload()
             });
           } catch (error) {
             alert(error.message);
           }
-          this.checkMetamaskConnect()
         }
       } else {
         this.$store.commit('SET_MODAL', true)
@@ -145,6 +147,8 @@ export default {
 
       if (contract === null || address === null) {
         console.log('null contract/address, relaunch')
+        await this.reconnect()
+        await this.checkMetamaskConnect()
         return
       }
       else {
@@ -156,6 +160,35 @@ export default {
         }
       }
       return
+    },
+
+    async reconnect() {
+      const providerOptions = {
+        walletconnect: {
+          package: WalletConnectProvider
+        },
+        'custom-injected': {
+          display: {
+            logo: 'https://cdn.bitkeep.vip/u_b_69b66a00-a046-11ec-a3eb-f758fa002ae8.png',
+            name: 'BitKeep',
+            description: 'Connect to your BitKeep Wallet'
+          },
+          package: connectors.injected,
+          connector: async (ProviderPackage, options) => {
+            const provider = new ProviderPackage(options)
+            return provider
+          }
+        }
+      }
+      console.log(providerOptions)
+      this.web3Modal = new Web3Modal({
+        providerOptions,
+        cacheProvider: true,
+        theme: 'dark'
+      })
+      let provider
+      provider = await this.web3Modal.connect()
+      this.metamaskProvider = new ethers.providers.Web3Provider(provider)
     },
 
     async getGamesInfinitely() {
@@ -301,6 +334,10 @@ body {
 @media screen and (max-width: 600px) {
   .fair-home {
     width: calc(100% - 16px)
+  }
+
+  h1 {
+    font-size: 18px;
   }
 }
 </style>

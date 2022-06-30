@@ -165,7 +165,7 @@ nav {
     }
 }
 
-@media screen and (max-width: 650px) {
+@media screen and (max-width: 750px) {
     .header-link {
         font-size: 14px;
         line-height: 18px;
@@ -182,7 +182,7 @@ nav {
     }
 }
 
-@media screen and (max-width: 530px) {
+@media screen and (max-width: 700px) {
     .connect-btn span {
         margin: 0;
     }
@@ -191,7 +191,7 @@ nav {
     }
 }
 
-@media screen and (max-width: 460px) {
+@media screen and (max-width: 550px) {
     .header-link {
         font-size: 10px;
         line-height: 18px;
@@ -206,7 +206,7 @@ nav {
 
     header {
         background-color: #F5F5F5;
-        z-index: 1001;
+        z-index: 100;
         margin-bottom: 0;
     }
 
@@ -238,6 +238,61 @@ nav {
         padding: 6px 4px;
         box-sizing: content-box;
         height: 25.5px !important;
+    }
+
+    @media screen and (max-width: 402px) {
+        .header-link {
+            font-size: 10px;
+            letter-spacing: -0.2pt;
+            line-height: 18px;
+            padding: 15px;
+            padding-right: 7px;
+            padding-left: 14px;
+        }
+
+        .nav, header {
+            height: 31.5px;
+        }
+
+        header {
+            background-color: #F5F5F5;
+            margin-bottom: 0;
+            border-right: 3px solid #F27C2F;
+        }
+
+        .header-link:first-child::after{
+            right: -17% !important;
+        }
+        .header-link:nth-child(2)::after{
+            right: -13% !important;
+        }
+        .header-link:after {
+            border: 3px solid #F27C2F;
+            position: absolute;
+            max-height: 28.5px;
+            z-index: -1;
+            content: "";
+            right: -17%;
+            top: 17%;
+            height: 100%;
+            width: 100%;
+            background-color: inherit;
+            -webkit-transform: skewX(-30deg);
+            -moz-transform: skewX(-30deg);
+            -ms-transform: skewX(-30deg);
+            transform: skewX(-30deg);
+        }
+
+        .connect-btn {
+            max-height: 17.5px;
+            padding: 6px 4px;
+            height: 31.5px !important;
+            border-right: 0;
+        }
+
+        .connect-btn span {
+            font-size: 9px;
+        }
     }
 }
 </style>

@@ -14,7 +14,8 @@ export default createStore({
     modalTitle: null,
     modalType: null,
     modalCaption: null,
-    accountShorted: null
+    accountShorted: null,
+    winnersShown: null
   },
   getters: {
   },
@@ -53,6 +54,9 @@ export default createStore({
     },
     SET_SHORTED(state, shorted) {
       state.accountShorted = shorted
+    },
+    SET_WINNERSSHOWN(state, id) {
+      state.winnersShown = id
     }
   },
   actions: {

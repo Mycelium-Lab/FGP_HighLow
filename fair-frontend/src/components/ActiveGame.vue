@@ -94,13 +94,16 @@ export default {
             }
         },
         joinBtnText: function() {
-            if (this.owner === this.address) {
+            if (this.owner === this.address && this.timeToFinish > 0) {
                 return 'Your game';
             } else if (this.joined === false && this.timeToFinish > 0) {
                 return 'Join';
-            } else if (this.joined === true) {
+            } else if (this.joined === true && this.timeToFinish > 0) {
                 return 'Waiting'
-            } else return ''
+            } else if (this.joined === true && this.timeToFinish == 0) {
+                return 'Finish'
+            } 
+            else return ''
         }
     },
     methods: {
@@ -110,6 +113,36 @@ export default {
             const number = this.number;
             const id = this.id
             const bid = this.bidInTokens;
+
+            if (this.joined === true && this.timeToFinish == 0) {
+                this.$store.commit('SET_MODAL', true)
+                this.$store.commit('SET_TITLE', 'Bid information')
+                this.$store.commit('SET_TYPE', 'info')
+                this.$store.commit('SET_CAPTION', 'Confirm this transaction in your wallet')
+                try {
+                    await contract.methods.finishGame(id).send({from: address}, async (err, transactionHash) => {
+                        if (err) {
+                            this.$store.commit('SET_MODAL', false)
+                            this.$store.commit('SET_TITLE', '')
+                            this.$store.commit('SET_TYPE', '')
+                            this.$store.commit('SET_CAPTION', '')
+                            console.log(err);
+                        }
+                        if (transactionHash) {
+                            emitter.emit('animateProgressBar')
+                            console.log(transactionHash);  
+                        }
+                    }).then(() => {
+                        this.$store.commit('SET_MODAL', false)
+                        this.$store.commit('SET_TITLE', '')
+                        this.$store.commit('SET_TYPE', '')
+                        this.$store.commit('SET_CAPTION', '')
+                    });
+                } catch(err) {
+                    console.log("error: ", err)
+                }
+            }
+
             if (window.ethereum && address && contract
                 && (number > 0 && number < 101)
                 && this.joined === false
@@ -122,6 +155,10 @@ export default {
                 try{
                 await contract.methods.joinGame(id, BigNumber.from(number)).send({from: address, value: ethers.utils.parseEther((bid).toString())}, (err, transactionHash) => {
                     if (err) {
+                    this.$store.commit('SET_MODAL', false)
+                    this.$store.commit('SET_TITLE', '')
+                    this.$store.commit('SET_TYPE', '')
+                    this.$store.commit('SET_CAPTION', '')
                     console.log(err);
                     }
                     if (transactionHash) {
@@ -290,6 +327,12 @@ export default {
     .info_row-value {
         font-size: 10px;
         line-height: 13px;
+    }
+}
+
+@media screen and (max-width: 400px) {
+    .currentgame {
+        padding: 12px 16px;
     }
 }
 </style>
