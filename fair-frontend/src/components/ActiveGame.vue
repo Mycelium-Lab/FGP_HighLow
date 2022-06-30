@@ -113,7 +113,7 @@ export default {
             const number = this.number;
             const id = this.id
             const bid = this.bidInTokens;
-
+            console.log(this.joined)
             if (this.joined === true && this.timeToFinish == 0) {
                 this.$store.commit('SET_MODAL', true)
                 this.$store.commit('SET_TITLE', 'Bid information')
@@ -137,13 +137,12 @@ export default {
                         this.$store.commit('SET_TITLE', '')
                         this.$store.commit('SET_TYPE', '')
                         this.$store.commit('SET_CAPTION', '')
+                        emitter.emit('finishProgress')
                     });
                 } catch(err) {
                     console.log("error: ", err)
                 }
-            }
-
-            if (window.ethereum && address && contract
+            } else if (window.ethereum && address && contract
                 && (number > 0 && number < 101)
                 && this.joined === false
                 && this.bets.indexOf(number) === -1
@@ -155,25 +154,41 @@ export default {
                 try{
                 await contract.methods.joinGame(id, BigNumber.from(number)).send({from: address, value: ethers.utils.parseEther((bid).toString())}, (err, transactionHash) => {
                     if (err) {
-                    this.$store.commit('SET_MODAL', false)
-                    this.$store.commit('SET_TITLE', '')
-                    this.$store.commit('SET_TYPE', '')
-                    this.$store.commit('SET_CAPTION', '')
-                    console.log(err);
+                        this.$store.commit('SET_MODAL', false)
+                        this.$store.commit('SET_TITLE', '')
+                        this.$store.commit('SET_TYPE', '')
+                        this.$store.commit('SET_CAPTION', '')
+                        console.log(err);
                     }
                     if (transactionHash) {
-                    emitter.emit('animateProgressBar')
-                    console.log(transactionHash);
+                        emitter.emit('animateProgressBar')
+                        console.log(transactionHash);
                     }
                 }).then(() => {
                     this.$store.commit('SET_MODAL', false)
                     this.$store.commit('SET_TITLE', '')
                     this.$store.commit('SET_TYPE', '')
                     this.$store.commit('SET_CAPTION', '')
+                    emitter.emit('finishProgress')
                 });
                 } catch(err) {
                     console.log("error: ", err)
                 }
+            } else if (this.joined === true) {
+                this.$store.commit('SET_MODAL', true)
+                this.$store.commit('SET_TITLE', 'Error')
+                this.$store.commit('SET_TYPE', 'info')
+                this.$store.commit('SET_CAPTION', 'Already joined this game')
+            } else if (!(number > 0 && number < 101)) {
+                this.$store.commit('SET_MODAL', true)
+                this.$store.commit('SET_TITLE', 'Error')
+                this.$store.commit('SET_TYPE', 'info')
+                this.$store.commit('SET_CAPTION', 'Wrong bet: "' + number + '", choose a number in range 1-100')
+            } else if (this.bets.indexOf(number) != -1) {
+                this.$store.commit('SET_MODAL', true)
+                this.$store.commit('SET_TITLE', 'Error')
+                this.$store.commit('SET_TYPE', 'info')
+                this.$store.commit('SET_CAPTION', 'Number ' + number + ' is already taken by another using. Consider betting on a different number?')
             }
         },
         getBets: async function() {

@@ -41,7 +41,10 @@ export default {
     },
     created() {
         emitter.on('animateProgressBar', () => {
-            this.progress();
+            this.progress()
+        })
+        emitter.on('finishProgress', () => {
+            this.endProgress()
         })
     },
     computed: {
@@ -72,6 +75,9 @@ export default {
             console.log(this.inProgress)
             this.inProgress = true
             console.log(this.inProgress)
+        },
+        endProgress() {
+            this.inProgress = false
         }
     }
 }

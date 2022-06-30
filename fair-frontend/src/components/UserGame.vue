@@ -183,6 +183,7 @@ export default {
                     this.$store.commit('SET_TITLE', '')
                     this.$store.commit('SET_TYPE', '')
                     this.$store.commit('SET_CAPTION', '')
+                    emitter.emit('finishProgress')
                 });
             } catch(err) {
                 console.log("error: ", err)
@@ -212,6 +213,7 @@ export default {
                     this.$store.commit('SET_TITLE', '')
                     this.$store.commit('SET_TYPE', '')
                     this.$store.commit('SET_CAPTION', '')
+                    emitter.emit('finishProgress')
                 })
             } catch(err) {
                 console.log("error: ", err)

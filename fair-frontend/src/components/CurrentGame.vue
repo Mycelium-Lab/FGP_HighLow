@@ -95,14 +95,30 @@ export default {
   methods: {
     async promptCreate() {
       if (window.ethereum && this.address 
-          && (this.bid != 0)
+          && (this.startgamebid != 0)
           && (this.startgamenumber > 0 && this.startgamenumber < 101) 
+          && (Number.isInteger(this.startgamenumber))
           && (this.startgameplayercount > -1 && this.startgameplayercount < 11 && this.startgameplayercount !== 1)
       ) {
         this.$store.commit('SET_MODAL', true)
         this.$store.commit('SET_TITLE', 'Bid')
         this.$store.commit('SET_TYPE', 'confirm')
         this.$store.commit('SET_CAPTION', 'Your bid ' + this.startgamebid + ' tokens. Would you like to proceed?')
+      } else if (this.startgamebid == 0) {
+        this.$store.commit('SET_MODAL', true)
+        this.$store.commit('SET_TITLE', 'Error')
+        this.$store.commit('SET_TYPE', 'info')
+        this.$store.commit('SET_CAPTION', 'Bid cant be 0')
+      } else if (!(this.startgamenumber > 0 && this.startgamenumber < 101) || (!(Number.isInteger(this.startgamenumber)))) {
+        this.$store.commit('SET_MODAL', true)
+        this.$store.commit('SET_TITLE', 'Error')
+        this.$store.commit('SET_TYPE', 'info')
+        this.$store.commit('SET_CAPTION', 'Wrong bet: "' + this.startgamenumber + '", choose a number in range 1-100')
+      } else if (!(this.startgameplayercount > -1 && this.startgameplayercount < 11 && this.startgameplayercount !== 1)) {
+        this.$store.commit('SET_MODAL', true)
+        this.$store.commit('SET_TITLE', 'Error')
+        this.$store.commit('SET_TYPE', 'info')
+        this.$store.commit('SET_CAPTION', 'Wrong participants limit')
       }
     },
     async handleCreate() {
@@ -116,7 +132,9 @@ export default {
       const limit = this.startgameplayercount;
       const bid = this.startgamebid
       if (window.ethereum && this.address 
+          && (bid != 0)
           && (number > 0 && number < 101) 
+          && (Number.isInteger(number))
           && (limit > -1 && limit < 11 && limit !== 1)
       ) {
         try{
@@ -140,6 +158,7 @@ export default {
             this.$store.commit('SET_TITLE', '')
             this.$store.commit('SET_TYPE', '')
             this.$store.commit('SET_CAPTION', '')
+            emitter.emit('finishProgress')
           });
         } catch(err) {
             console.log("error: ", err)
