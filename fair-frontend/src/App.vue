@@ -355,7 +355,6 @@ body {
 
 @media screen and (max-width: 600px) {
   .fair-home {
-    margin-top: 64px;
     width: calc(100% - 16px)
   }
 

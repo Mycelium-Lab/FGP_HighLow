@@ -23,11 +23,16 @@ export default {
   name: 'HeaderComponent',
   store,
   computed: {
+    web3: function() {
+      return this.$store.state.web3;
+    },
     shorted: function() {
         return this.$store.state.accountShorted
     },
     currentChain: function() {
-      return this.$store.state.web3.currentProvider.chainId;
+        if (this.web3.currentProvider) {
+            return this.$store.state.web3.currentProvider.chainId;
+        } else return null
     }
   },
   methods: {
