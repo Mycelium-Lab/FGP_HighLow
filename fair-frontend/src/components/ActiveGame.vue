@@ -113,7 +113,6 @@ export default {
             const number = this.number;
             const id = this.id
             const bid = this.bidInTokens;
-            console.log(this.joined)
             if (this.joined === true && this.timeToFinish == 0) {
                 this.$store.commit('SET_MODAL', true)
                 this.$store.commit('SET_TITLE', 'Bid information')
