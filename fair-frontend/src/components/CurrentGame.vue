@@ -231,11 +231,18 @@ h2:hover {
   flex-direction: column;
   justify-content: space-between;
   align-items: flex-start;
+  margin-right: 16px;
 }
 
 .newgame-form-unit {
-  margin: 16px;
+  margin: 14px;
   margin-left: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  max-height: 21px;
 }
 
 .newgame-form-unit span {
@@ -256,6 +263,7 @@ h2:hover {
   font-size: 15px;
   color: #2C2F33;
   max-width: 96px;
+  min-width: 96px;
 }
 
 .newgame-form-unit select {
@@ -265,7 +273,7 @@ h2:hover {
   font-weight: 600;
   font-size: 15px;
   color: #2C2F33;
-  max-width: 96px;
+  max-width: 102px;
 }
 
 .newgame-start {
