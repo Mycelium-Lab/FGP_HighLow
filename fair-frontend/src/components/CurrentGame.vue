@@ -5,10 +5,10 @@
       <div class="newgame">
         <div class="newgame-form">
           <div class="newgame-form-unit">
-            <span>Guess a number</span><input pattern="[0,9]{1,3}" v-model="startgamenumber" type="number"/>
+            <span>Guess a number</span><input pattern="[0,9]{1,3}" v-model="startgamenumber" min="1" max="100" type="number"/>
           </div>
           <div class="newgame-form-unit">
-            <span>Your bid</span><input v-model="startgamebid" type="number"/><span>ROSE</span>
+            <span>Your bid</span><input v-model="startgamebid" min="0" type="number"/><span>ROSE</span>
           </div>
           <div class="newgame-form-unit">
             <span>Limit of players</span>

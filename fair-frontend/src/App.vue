@@ -56,7 +56,6 @@ export default {
     }
   },
   async created() {
-    console.log('launch')
     this.launchApp()
   },
   methods: {
@@ -100,7 +99,6 @@ export default {
           const provider = new ethers.providers.Web3Provider(window.ethereum);
           const isMetaMaskConnected = async () => {
             let accounts = await provider.listAccounts();
-            console.log(accounts)
             if(accounts.length> 0)
             {
               this.account = accounts[0]
@@ -135,15 +133,15 @@ export default {
                     method: 'wallet_addEthereumChain',
                     params: [
                         {
-                            chainId: '0xa515',
-                            chainName: 'Emerald Paratime Testnet',
-                            rpcUrls: ['https://testnet.emerald.oasis.dev/'],
+                            chainId: network.chainId,
+                            chainName: 'Emerald Paratime Mainnet',
+                            rpcUrls: ['https://emerald.oasis.dev'],
                             nativeCurrency: {
                                 name: 'ROSE',
                                 symbol: 'ROSE',
                                 decimals: 18
                             },
-                            blockExplorerUrls: ['https://bscscan.com']
+                            blockExplorerUrls: ['https://explorer.emerald.oasis.dev']
                         }
                     ],
                     id: 0
@@ -168,7 +166,6 @@ export default {
       const address = this.address;
 
       if (contract === null || address === null) {
-        console.log('null contract/address, relaunch')
         await this.reconnect()
         await this.checkMetamaskConnect()
         return
@@ -202,7 +199,6 @@ export default {
           }
         }
       }
-      console.log(providerOptions)
       this.web3Modal = new Web3Modal({
         providerOptions,
         cacheProvider: true,
@@ -229,7 +225,6 @@ export default {
             web3.eth.getBalance(address).then((balanceInWei) => {
                 const balance = web3.utils.fromWei(balanceInWei);
                 this.$store.commit('SET_BALANCE', balance)
-                console.log("Balance in ROSE: ", this.balance);
             });
         }
         catch (error) {
