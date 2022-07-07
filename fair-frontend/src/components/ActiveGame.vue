@@ -139,6 +139,10 @@ export default {
                         emitter.emit('finishProgress')
                     });
                 } catch(err) {
+                    this.$store.commit('SET_MODAL', false)
+                    this.$store.commit('SET_TITLE', '')
+                    this.$store.commit('SET_TYPE', '')
+                    this.$store.commit('SET_CAPTION', '')
                     console.log("error: ", err)
                 }
             } else if (window.ethereum && address && contract
@@ -171,6 +175,10 @@ export default {
                     emitter.emit('finishProgress')
                 });
                 } catch(err) {
+                    this.$store.commit('SET_MODAL', false)
+                    this.$store.commit('SET_TITLE', '')
+                    this.$store.commit('SET_TYPE', '')
+                    this.$store.commit('SET_CAPTION', '')
                     console.log("error: ", err)
                 }
             } else if (this.joined === true) {

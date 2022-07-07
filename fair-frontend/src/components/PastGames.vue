@@ -1,7 +1,7 @@
 <template>
   <div class="page">
     <h1>Past games</h1>
-    <UserGame v-for="game in pastGames.slice().reverse().filter(x => x[3] < 3)" :key="game[4]"
+    <UserGame v-for="game in pastGames.slice().reverse()" :key="game[4]"
     :bid="game[0]"
     :timestamp="game[1]"
     :participants="game[2]"
@@ -24,8 +24,6 @@ export default {
   components: {
     UserGame
   },
-  created() {
-  },
   computed: {
     pastGames: function() {
         return this.$store.state.pastGames;
@@ -36,9 +34,6 @@ export default {
     address: function() {
         return this.$store.state.user;
     }
-  },
-  methods: {
-
   }
 }
 </script>

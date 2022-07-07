@@ -1,5 +1,5 @@
 <template>
-  <div class="usergame">
+  <div class="usergame" v-if="winners[0] || status < 3">
     <div class="usergame_info">
         <div v-if="luckyNumber != 0" class="usergame_info-row">
             <span class="info-row-title">Lucky number: </span><span class="info-row-value">{{luckyNumber}}</span>
@@ -186,6 +186,10 @@ export default {
                     emitter.emit('finishProgress')
                 });
             } catch(err) {
+                this.$store.commit('SET_MODAL', false)
+                this.$store.commit('SET_TITLE', '')
+                this.$store.commit('SET_TYPE', '')
+                this.$store.commit('SET_CAPTION', '')
                 console.log("error: ", err)
             }
         } else if (window.ethereum && address && contract
@@ -216,6 +220,10 @@ export default {
                     emitter.emit('finishProgress')
                 })
             } catch(err) {
+                this.$store.commit('SET_MODAL', false)
+                this.$store.commit('SET_TITLE', '')
+                this.$store.commit('SET_TYPE', '')
+                this.$store.commit('SET_CAPTION', '')
                 console.log("error: ", err)
             }
         }

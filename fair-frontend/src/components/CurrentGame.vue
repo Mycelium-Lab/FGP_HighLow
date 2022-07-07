@@ -161,6 +161,10 @@ export default {
             emitter.emit('finishProgress')
           });
         } catch(err) {
+            this.$store.commit('SET_MODAL', false)
+            this.$store.commit('SET_TITLE', '')
+            this.$store.commit('SET_TYPE', '')
+            this.$store.commit('SET_CAPTION', '')
             console.log("error: ", err)
         }
       }
@@ -171,8 +175,6 @@ export default {
       this.$store.commit('SET_TYPE', 'rules')
       this.$store.commit('SET_CAPTION', '')
     }
-  },
-  props: {
   }
 }
 </script>
