@@ -7,6 +7,8 @@ contract Fair {
     uint256 lastFinishedGameId;
     uint256[] gamesByUser;
 
+    event CreateGame(uint256 gameId, uint256 bid);
+
     struct Game {
         address owner;
         bool isFinished;
@@ -56,6 +58,7 @@ contract Fair {
         biddersList[gameId][msg.sender].number = _number;
         biddersList[gameId][msg.sender].participatedFlag = true;
         gamesByUserList[msg.sender].gamesByUser.push(gameId);
+        emit CreateGame(gameId, msg.value);
         gameId ++;
     }
 
