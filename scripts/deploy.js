@@ -7,9 +7,9 @@
 const hre = require("hardhat");
 
 async function main() {
-
+  const signer = await hre.ethers.getSigner()
   const Fair = await hre.ethers.getContractFactory("Fair");
-  const fair = await Fair.deploy();
+  const fair = await Fair.deploy(signer.address, 100);
 
   await fair.deployed();
 

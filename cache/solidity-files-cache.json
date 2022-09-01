@@ -39,8 +39,8 @@
       ]
     },
     "/home/egor/Документы/WorkplaceSmartContracts/fair-p2p-game/node_modules/@openzeppelin/contracts/access/Ownable.sol": {
-      "lastModificationDate": 1661981344664,
-      "contentHash": "8398972af73b4e9e5ff3b31cad86234f",
+      "lastModificationDate": 1662035884816,
+      "contentHash": "e436cea06129be2c73cda4b1acc848b5",
       "sourceName": "@openzeppelin/contracts/access/Ownable.sol",
       "solcConfig": {
         "version": "0.8.11",
