@@ -1,10 +1,13 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.11;
 
-contract Fair {
+import "@openzeppelin/contracts/access/Ownable.sol";
+contract Fair is Ownable {
     uint256 gameId;
     uint256 nonce;
     uint256 lastFinishedGameId;
+    uint16 public feePercent;
+    address public wallet;
     uint256[] gamesByUser;
 
     event CreateGame(uint256 gameId, uint256 bid);
@@ -44,6 +47,11 @@ contract Fair {
     mapping (uint256 => mapping(address => Bid)) public biddersList;  // gameId => participant_address => Bid
     mapping (address => GamesIdList) gamesByUserList; // user address => array of all his games
     mapping (address => mapping(uint256 => Prize)) public prizeList;    // user address => gameId => winner or not
+
+    constructor(address _wallet, uint16 _feePercent) {
+        wallet = _wallet;
+        feePercent = _feePercent; //if equals 100 -> percent = 1%
+    }
 
     function createGame(uint8 _number, uint8 _limit) public payable onlyInRange(_number) {  
         require(msg.value > 0, "Free games are not supported here!");
@@ -155,7 +163,12 @@ contract Fair {
         require(prizeList[msg.sender][_gameId].isWinner == true, "You are not a winner of the game");
         require(prizeList[msg.sender][_gameId].isClaimed == false, "Prize is claimed already");
         prizeList[msg.sender][_gameId].isClaimed = true;
-        payable(msg.sender).transfer(prizeList[msg.sender][_gameId].prize);
+        uint256 prize = prizeList[msg.sender][_gameId].prize;
+        uint256 sendToUser =  prize - prize * feePercent / 10000;
+        uint256 sendToWallet = prize - sendToUser;
+        (bool success1, ) = msg.sender.call{value: sendToUser}("");
+        (bool success2, ) = wallet.call{value: sendToWallet}("");
+        require(success1 && success2, "Transfers not success");
     }
 
     // Utils functions
@@ -243,7 +256,15 @@ contract Fair {
         uint8 randomNumber = uint8(uint(keccak256(abi.encodePacked(block.timestamp, msg.sender, nonce))) % 101); 
         nonce++;
         return randomNumber;
-    } 
+    }
+
+    function newFeePercent(uint16 _feePercent) external onlyOwner {
+        feePercent = _feePercent;
+    }
+
+    function newWallet(address _wallet) external onlyOwner {
+        wallet = _wallet;
+    }
 
     // Modifiers
 

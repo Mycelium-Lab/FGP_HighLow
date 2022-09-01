@@ -2,9 +2,83 @@
   "_format": "hh-sol-cache-2",
   "files": {
     "/home/egor/Документы/WorkplaceSmartContracts/fair-p2p-game/contracts/Fair.sol": {
-      "lastModificationDate": 1661890501684,
-      "contentHash": "8868ce05bb0c78b1f56586d150baac66",
+      "lastModificationDate": 1662019485338,
+      "contentHash": "7c439d6555783f2308f8e4f865d34f07",
       "sourceName": "contracts/Fair.sol",
+      "solcConfig": {
+        "version": "0.8.11",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "@openzeppelin/contracts/access/Ownable.sol"
+      ],
+      "versionPragmas": [
+        "0.8.11"
+      ],
+      "artifacts": [
+        "Fair"
+      ]
+    },
+    "/home/egor/Документы/WorkplaceSmartContracts/fair-p2p-game/node_modules/@openzeppelin/contracts/access/Ownable.sol": {
+      "lastModificationDate": 1661981344664,
+      "contentHash": "8398972af73b4e9e5ff3b31cad86234f",
+      "sourceName": "@openzeppelin/contracts/access/Ownable.sol",
+      "solcConfig": {
+        "version": "0.8.11",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "../utils/Context.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "Ownable"
+      ]
+    },
+    "/home/egor/Документы/WorkplaceSmartContracts/fair-p2p-game/node_modules/@openzeppelin/contracts/utils/Context.sol": {
+      "lastModificationDate": 1661981344664,
+      "contentHash": "5f2c5c4b6af2dd4551027144797bc8be",
+      "sourceName": "@openzeppelin/contracts/utils/Context.sol",
       "solcConfig": {
         "version": "0.8.11",
         "settings": {
@@ -30,10 +104,10 @@
       },
       "imports": [],
       "versionPragmas": [
-        "0.8.11"
+        "^0.8.0"
       ],
       "artifacts": [
-        "Fair"
+        "Context"
       ]
     }
   }

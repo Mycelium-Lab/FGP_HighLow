@@ -17,7 +17,7 @@ describe("Fair", function () {
 	beforeEach(async function() {
 		[acc1, acc2, acc3, acc4, acc5] = await ethers.getSigners();
 		const Fair = await ethers.getContractFactory("Fair", acc1);
-		fair = await Fair.deploy();
+		fair = await Fair.deploy(acc1.address, 100);
 		await fair.deployed();
 		console.log(fair.address);
 	})
@@ -148,7 +148,20 @@ describe("Fair", function () {
 		await network.provider.send("evm_increaseTime", [13600])
 		const tx2 = await fair.connect(acc2).finishGame(0)
 		const tx3 = await fair.connect(acc2).claim(0)
+		await expect(() => tx3).to.changeEtherBalance(acc2, 99)
+		//to owner wallet
+		await expect(() => tx3).to.changeEtherBalance(acc1, 1)
+	})
 
-		await expect(() => tx3).to.changeEtherBalance(acc2, 100)
+	it("newFeePercent() and newWallet() test. positive", async function() {
+		const tx = await fair.connect(acc2).createGame(12, 4, {value: 1000})
+		await network.provider.send("evm_increaseTime", [13600])
+		await fair.newFeePercent(50) //0,5%
+		await fair.newWallet(acc3.address)
+		const tx2 = await fair.connect(acc2).finishGame(0)
+		const tx3 = await fair.connect(acc2).claim(0)
+		await expect(() => tx3).to.changeEtherBalance(acc2, 995)
+		//to new owner wallet
+		await expect(() => tx3).to.changeEtherBalance(acc3, 5)
 	})
 })
