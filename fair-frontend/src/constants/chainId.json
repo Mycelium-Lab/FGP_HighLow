@@ -1,3 +1,4 @@
 {
-    "chainId": "0xa516"
+    "chainId": "0xa516",
+    "chainIdTestnet": "0xa515"
 }

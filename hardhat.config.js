@@ -8,11 +8,21 @@ module.exports = {
       network_id: 4,
       accounts: [process.env.PRIVATE_KEY]
     },
-    // goerli: {
-    //   url: "https://goerli.prylabs.net",
-    //   network_id: 5,
-    //   accounts: [process.env.PRIVATE_KEY]
-    // }
+    goerli: {
+      url: "https://goerli.prylabs.net",
+      network_id: 5,
+      accounts: [process.env.PRIVATE_KEY]
+    },
+    emerald_testnet: {
+      url: "https://testnet.emerald.oasis.dev",
+      accounts:
+        process.env.PRIVATE_KEY_EMERALD !== undefined ? [process.env.PRIVATE_KEY_EMERALD] : [],
+    },
+    emerald_mainnet: {
+      url: "https://emerald.oasis.dev",
+      accounts:
+        process.env.PRIVATE_KEY_EMERALD !== undefined ? [process.env.PRIVATE_KEY_EMERALD] : [],
+    }
   },
   etherscan: {
     apiKey: process.env.ETHERSCAN_API_KEY,

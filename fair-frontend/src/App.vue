@@ -95,7 +95,8 @@ export default {
     },
     async checkMetamaskConnect() {
       if (window.ethereum) {
-        if (this.currentChain === network.chainId) {
+        // if (this.currentChain === network.chainId) {
+        if (this.currentChain === network.chainIdTestnet) {
           const provider = new ethers.providers.Web3Provider(window.ethereum);
           const isMetaMaskConnected = async () => {
             let accounts = await provider.listAccounts();
@@ -128,20 +129,40 @@ export default {
             });
           } catch (error) {
             if (typeof window !== 'undefined') {
+                // window.ethereum.request({
+                //     jsonrpc: '2.0',
+                //     method: 'wallet_addEthereumChain',
+                //     params: [
+                //         {
+                //             chainId: network.chainId,
+                //             chainName: 'Emerald Paratime Mainnet',
+                //             rpcUrls: ['https://emerald.oasis.dev'],
+                //             nativeCurrency: {
+                //                 name: 'ROSE',
+                //                 symbol: 'ROSE',
+                //                 decimals: 18
+                //             },
+                //             blockExplorerUrls: ['https://explorer.emerald.oasis.dev']
+                //         }
+                //     ],
+                //     id: 0
+                // }).then(() => {
+                //   location.reload()
+                // });
                 window.ethereum.request({
                     jsonrpc: '2.0',
                     method: 'wallet_addEthereumChain',
                     params: [
                         {
                             chainId: network.chainId,
-                            chainName: 'Emerald Paratime Mainnet',
-                            rpcUrls: ['https://emerald.oasis.dev'],
+                            chainName: 'Emerald Paratime Testnet',
+                            rpcUrls: ['https://testnet.emerald.oasis.dev'],
                             nativeCurrency: {
                                 name: 'ROSE',
                                 symbol: 'ROSE',
                                 decimals: 18
                             },
-                            blockExplorerUrls: ['https://explorer.emerald.oasis.dev']
+                            blockExplorerUrls: ['https://testnet.explorer.emerald.oasis.dev']
                         }
                     ],
                     id: 0
