@@ -7,6 +7,7 @@ contract Fair is Ownable {
     uint256 nonce;
     uint256 lastFinishedGameId;
     uint16 public feePercent;
+    uint16 public timeToFinish; //seconds
     address public wallet;
     uint256[] gamesByUser;
 
@@ -48,9 +49,13 @@ contract Fair is Ownable {
     mapping (address => GamesIdList) gamesByUserList; // user address => array of all his games
     mapping (address => mapping(uint256 => Prize)) public prizeList;    // user address => gameId => winner or not
 
-    constructor(address _wallet, uint16 _feePercent) {
+    constructor(address _wallet, uint16 _feePercent, uint16 _timeToFinish) {
+        require(_wallet != address(0), 'Wallet is address(0)');
+        require(_feePercent > 0 && _feePercent < 10000, 'Fee percent is less than 0 or more than 10000');
+        require(_timeToFinish != 0, 'Time to finish is equal to 0');
         wallet = _wallet;
         feePercent = _feePercent; //if equals 100 -> percent = 1%
+        timeToFinish = _timeToFinish; //seconds
     }
 
     function createGame(uint8 _number, uint8 _limit) public payable onlyInRange(_number) {  
@@ -85,7 +90,7 @@ contract Fair is Ownable {
 
     function finishGame(uint256 _gameId) public { 
         require(gamesList[_gameId].isFinished == false, "The game is finished already");
-        require(block.timestamp > gamesList[_gameId].createdTimestamp + 300, "You can finish a game only after exact period");
+        require(block.timestamp > gamesList[_gameId].createdTimestamp + timeToFinish, "You can finish a game only after exact period");
         require(biddersList[_gameId][msg.sender].participatedFlag == true, "Only participants can finish a game");
         if(gamesList[_gameId].participants.length == 1) {
             prizeList[msg.sender][_gameId].isWinner = true;
@@ -242,7 +247,7 @@ contract Fair is Ownable {
                 userGames[counter + 3] = 0; // prize is claimed 
             } else if (prizeList[_user][currentGameId].isWinner) {
                 userGames[counter + 3] = 1; // the game is finished already and user allowed to claim prize
-            } else if (!gamesList[currentGameId].isFinished && block.timestamp >= gamesList[currentGameId].createdTimestamp + 300) {
+            } else if (!gamesList[currentGameId].isFinished && block.timestamp >= gamesList[currentGameId].createdTimestamp + timeToFinish) {
                 userGames[counter + 3] = 2; // the game is ready for finish
             } else {
                 userGames[counter + 3] = 3; // the game in progress
@@ -259,11 +264,18 @@ contract Fair is Ownable {
     }
 
     function newFeePercent(uint16 _feePercent) external onlyOwner {
+        require(_feePercent < 10000, 'New fee percent is less than 10000');
         feePercent = _feePercent;
     }
 
     function newWallet(address _wallet) external onlyOwner {
+        require(_wallet != address(0), 'New Wallet is address(0)');
         wallet = _wallet;
+    }
+
+    function newTimeToFinish(uint16 _timeToFinish) external onlyOwner {
+        require(_timeToFinish != 0, 'Time to finish is equal to 0');
+        timeToFinish = _timeToFinish;
     }
 
     // Modifiers
@@ -274,7 +286,7 @@ contract Fair is Ownable {
     }
 
     modifier onlyInGamePeriod(uint256 _gameId) {
-        require(block.timestamp <= gamesList[_gameId].createdTimestamp + 300, "The game is finished");  // 300 = 60 sec * 5
+        require(block.timestamp <= gamesList[_gameId].createdTimestamp + timeToFinish, "The game is finished"); 
         _;
     }
 }

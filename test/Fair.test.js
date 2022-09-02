@@ -4,6 +4,7 @@ const {
 } = require("@nomicfoundation/hardhat-network-helpers");
 const { anyValue } = require("@nomicfoundation/hardhat-chai-matchers/withArgs");
 const { expect } = require("chai");
+const assert = require("assert");
 
 describe("Fair", function () {
 
@@ -17,7 +18,7 @@ describe("Fair", function () {
 	beforeEach(async function() {
 		[acc1, acc2, acc3, acc4, acc5] = await ethers.getSigners();
 		const Fair = await ethers.getContractFactory("Fair", acc1);
-		fair = await Fair.deploy(acc1.address, 100);
+		fair = await Fair.deploy(acc1.address, 100, 300);
 		await fair.deployed();
 		console.log(fair.address);
 	})
@@ -160,8 +161,16 @@ describe("Fair", function () {
 		await fair.newWallet(acc3.address)
 		const tx2 = await fair.connect(acc2).finishGame(0)
 		const tx3 = await fair.connect(acc2).claim(0)
+		//get percent
 		await expect(() => tx3).to.changeEtherBalance(acc2, 995)
 		//to new owner wallet
 		await expect(() => tx3).to.changeEtherBalance(acc3, 5)
+	})
+
+	it("newTimeToFinish() test. positive", async () => {
+		const newTimeToFinish = "150" //sec
+		await fair.newTimeToFinish(newTimeToFinish)
+		const timeToFinish = await fair.timeToFinish()
+		assert.equal(timeToFinish, newTimeToFinish, "Change time to finish")
 	})
 })
