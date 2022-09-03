@@ -17,9 +17,12 @@ async function main() {
 
   await fair.deployed();
 
+  await fair.transferOwnership('0xE8D562606F35CB14dA3E8faB1174F9B5AE8319c4').then(()=>{console.log('Transfered ownership')})
+
   console.log(
     `Fair deployed to ${fair.address}`
   );
+
 }
 
 // We recommend this pattern to be able to use async/await everywhere

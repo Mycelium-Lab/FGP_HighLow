@@ -6,7 +6,7 @@ export default createStore({
     user: null,
     web3: null,
     balance: null,
-    fairAddress: "0x9173a93CdCEA2E10F6aE64e12A0412f6680FFf29",
+    fairAddress: "0x3A73992FC2f4592f095065CA25fd4b24C0350725",
     fairContract: null,
     pastGames: [],
     games: [],
