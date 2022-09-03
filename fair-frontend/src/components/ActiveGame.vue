@@ -78,8 +78,9 @@ export default {
         currentTimestamp: function() {
             return Math.round(this.currentTime / 1000);
         },
-        timeToFinish: function() {
-            const time = Number(this.timestamp) + 300 - this.currentTimestamp
+        timeToFinish: async function() {
+            const secondsTimeToFinish = await this.contract.methods.timeToFinish().call()
+            const time = Number(this.timestamp) + parseInt(secondsTimeToFinish.toString()) - this.currentTimestamp
             if (time > 0) {
                 return time
             } else {
