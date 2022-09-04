@@ -18,7 +18,7 @@ describe("Fair", function () {
 	beforeEach(async function() {
 		[acc1, acc2, acc3, acc4, acc5] = await ethers.getSigners();
 		const Fair = await ethers.getContractFactory("Fair", acc1);
-		fair = await Fair.deploy(acc1.address, 100, 300);
+		fair = await Fair.deploy(acc1.address, 100, 300, 30);
 		await fair.deployed();
 		console.log(fair.address);
 	})
@@ -107,10 +107,12 @@ describe("Fair", function () {
 	})
 
 	it("getUserGames() test. positive", async function() {
-		const tx = await fair.connect(acc2).createGame(12, 4, {value: 100})
+		for (let i = 0; i < 50; i++) {
+			const tx = await fair.connect(acc2).createGame(12, 4, {value: 100})
+		}
 		const tx2 = await fair.connect(acc4).getUserGames(acc2.address)
 		console.log(tx2)
-		expect(tx2[3]).to.eq(3)
+		expect(tx2.length).to.eq(240) //240 because 30 last games * 8
 	})
 
 	it("gamesList() test. positive", async function() {
@@ -173,4 +175,5 @@ describe("Fair", function () {
 		const timeToFinish = await fair.timeToFinish()
 		assert.equal(timeToFinish, newTimeToFinish, "Change time to finish")
 	})
+
 })

@@ -8,6 +8,7 @@ contract Fair is Ownable {
     uint256 lastFinishedGameId;
     uint16 public feePercent;
     uint16 public timeToFinish; //seconds
+    uint16 public userGamesToReturnNumber;
     address public wallet;
     uint256[] gamesByUser;
 
@@ -49,13 +50,15 @@ contract Fair is Ownable {
     mapping (address => GamesIdList) gamesByUserList; // user address => array of all his games
     mapping (address => mapping(uint256 => Prize)) public prizeList;    // user address => gameId => winner or not
 
-    constructor(address _wallet, uint16 _feePercent, uint16 _timeToFinish) {
+    constructor(address _wallet, uint16 _feePercent, uint16 _timeToFinish, uint16 _userGamesToReturnNumber) {
         require(_wallet != address(0), 'Wallet is address(0)');
         require(_feePercent > 0 && _feePercent < 10000, 'Fee percent is less than 0 or more than 10000');
         require(_timeToFinish != 0, 'Time to finish is equal to 0');
+        require(_userGamesToReturnNumber >= 30, 'UserGamesToReturnNumber have to be more than 30');
         wallet = _wallet;
         feePercent = _feePercent; //if equals 100 -> percent = 1%
         timeToFinish = _timeToFinish; //seconds
+        userGamesToReturnNumber = _userGamesToReturnNumber;
     }
 
     function createGame(uint8 _number, uint8 _limit) public payable onlyInRange(_number) {  
@@ -232,9 +235,27 @@ contract Fair is Ownable {
     }
 
     function getUserGames(address _user) public view returns(uint256[] memory) {
-        uint256[] memory userGames = new uint256[](gamesByUserList[_user].gamesByUser.length * 8);
         uint256 counter;
-        for (uint256 _gameId; _gameId < gamesByUserList[_user].gamesByUser.length; _gameId ++) {
+        (
+            uint256 _gameId, 
+            uint256[] memory userGames
+        ) 
+        = 
+            gamesByUserList[_user].gamesByUser.length < 30 
+            ? 
+            (
+                0, 
+                new uint256[](gamesByUserList[_user].gamesByUser.length * 8))
+            :
+            (
+                gamesByUserList[_user].gamesByUser.length - userGamesToReturnNumber,
+                new uint256[](userGamesToReturnNumber * 8)
+            );
+        for (
+            _gameId;
+            _gameId < gamesByUserList[_user].gamesByUser.length; 
+            _gameId ++
+        ) {
             uint256 currentGameId = gamesByUserList[_user].gamesByUser[_gameId];
             userGames[counter] = gamesList[currentGameId].bid;
             userGames[counter + 1] = gamesList[currentGameId].createdTimestamp;
@@ -278,6 +299,10 @@ contract Fair is Ownable {
         timeToFinish = _timeToFinish;
     }
 
+    function newUserGamesToReturnNumber(uint16 _userGamesToReturnNumber) external onlyOwner {
+        require(_userGamesToReturnNumber >= 30, 'UserGamesToReturnNumber have to be more than 30');
+        userGamesToReturnNumber = _userGamesToReturnNumber;
+    }
     // Modifiers
 
     modifier onlyInRange(uint8 _number) {
