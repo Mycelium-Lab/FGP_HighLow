@@ -2,8 +2,8 @@
   "_format": "hh-sol-cache-2",
   "files": {
     "/home/egor/Документы/WorkplaceSmartContracts/fair-p2p-game/contracts/Fair.sol": {
-      "lastModificationDate": 1662320399581,
-      "contentHash": "8bdc1bcea889f372fd7d0818c9c6a87e",
+      "lastModificationDate": 1662321329494,
+      "contentHash": "c98f14af24755118c714b762657ae4d2",
       "sourceName": "contracts/Fair.sol",
       "solcConfig": {
         "version": "0.8.11",

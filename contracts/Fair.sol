@@ -52,7 +52,7 @@ contract Fair is Ownable {
 
     constructor(address _wallet, uint16 _feePercent, uint16 _timeToFinish, uint16 _userGamesToReturnNumber) {
         require(_wallet != address(0), 'Wallet is address(0)');
-        require(_feePercent > 0 && _feePercent < 10000, 'Fee percent is less than 0 or more than 10000');
+        require(_feePercent < 10000, 'Fee percent is more than 10000');
         require(_timeToFinish != 0, 'Time to finish is equal to 0');
         require(_userGamesToReturnNumber >= 30, 'UserGamesToReturnNumber have to be more than 30');
         wallet = _wallet;
