@@ -16,7 +16,7 @@ describe("Fair", function () {
 	let fair;
 
 	beforeEach(async function() {
-		[acc1, acc2, acc3, acc4, acc5] = await ethers.getSigners();
+		[acc1, acc2, acc3, acc4, acc5, acc6] = await ethers.getSigners();
 		const Fair = await ethers.getContractFactory("Fair", acc1);
 		fair = await Fair.deploy(acc1.address, 100, 300, 30);
 		await fair.deployed();

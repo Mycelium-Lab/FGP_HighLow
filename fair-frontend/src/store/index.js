@@ -6,7 +6,7 @@ export default createStore({
     user: null,
     web3: null,
     balance: null,
-    fairAddress: "0xED56F957c65fF4B9Bf209F496827b7614d229Bb5",
+    fairAddress: "0xc63d2a04762529edB649d7a4cC3E57A0085e8544",
     fairContract: null,
     pastGames: [],
     games: [],
@@ -14,6 +14,8 @@ export default createStore({
     modalTitle: null,
     modalType: null,
     modalCaption: null,
+    modalAmount: null,
+    modalFinishID: null,
     accountShorted: null,
     winnersShown: null
   },
@@ -51,6 +53,12 @@ export default createStore({
     },
     SET_CAPTION(state, caption) {
       state.modalCaption = caption
+    },
+    SET_AMOUNT(state, amount){
+      state.modalAmount = amount
+    },
+    SET_FINISH_ID(state, ID){
+      state.modalFinishID = ID
     },
     SET_SHORTED(state, shorted) {
       state.accountShorted = shorted

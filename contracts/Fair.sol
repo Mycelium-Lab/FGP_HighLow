@@ -13,6 +13,7 @@ contract Fair is Ownable {
     uint256[] gamesByUser;
 
     event CreateGame(uint256 gameId, uint256 bid);
+    event FinishGame(uint256 gameId, address[] winners, uint256[] prizes);
 
     struct Game {
         address owner;
@@ -165,6 +166,7 @@ contract Fair is Ownable {
         }
         gamesList[_gameId].isFinished = true;
         lastFinishedGameId = _gameId;
+        emit FinishGame(_gameId, gamesList[_gameId].winners, gamesList[_gameId].prizes);
     }
 
     function claim(uint256 _gameId) public {

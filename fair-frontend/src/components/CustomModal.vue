@@ -16,6 +16,22 @@
                     <span class="modal-rule modal-specialrule">The winners are 30% of users who made the closest bet to the number chosen by the computer (but not less than 1 person), the rest - lost.</span>
                     <span class="modal-rule">5. Bets made by users form a prize pool. At the end of the game the prize pool is distributed equally among the winners.</span>
                 </div>
+                <div id="gameover-win-base" v-if="modalType === 'gameover-win'">
+                    <div class="gameover-win">
+                        <div class="gameover-win-elem" id="gameover-win-elem-text">
+                            <p id="gameover-win-text">You WIN!</p>
+                            <p id="gameover-win-second-text">You <span id="gameover-win-tokens">won {{modalAmount}} Tokens</span></p>
+                        </div>
+                        <div class="gameover-win-elem">
+                            <img class="maskot" src="../assets/maskot.png">
+                        </div>
+                    </div>
+                    <button @click="handleClaim()" id="claim">CLAIM</button>
+                </div>
+                <div id="gameover-win-lose" v-if="modalType === 'gameover-lose'">
+                    <img class="maskot" src="../assets/maskot.png">
+                    <p id="gameover-lose-text">You LOSE!</p>
+                </div>
                 <img class="maskot" v-if="modalType === 'rules'||(modalType === 'info' && this.inProgress === false)" src="../assets/maskot.png">
                 <img class="load" v-else-if="modalType === 'info' && this.inProgress === true" src="../assets/icons/time.png">
                 <div v-if="modalType === 'confirm'" class="button-wrapper">
@@ -54,12 +70,24 @@ export default {
         modalType: function() {
             return this.$store.state.modalType
         },
+        modalAmount: function() {
+            return this.$store.state.modalAmount
+        },
         modalCaption: function() {
             return this.$store.state.modalCaption
         },
         active: function() {
             return this.$store.state.modal
-        }
+        },
+        contract: function() {
+            return this.$store.state.fairContract
+        },
+        address: function() {
+            return this.$store.state.user
+        },
+        id: function() {
+            return this.$store.state.modalFinishID
+        },
     },
     methods: {
         handleClose() {
@@ -67,6 +95,8 @@ export default {
             this.$store.commit('SET_TITLE', '')
             this.$store.commit('SET_TYPE', '')
             this.$store.commit('SET_CAPTION', '')
+            this.$store.commit('SET_AMOUNT', '')
+            this.$store.commit('SET_FINISH_ID', '')
         },
         confirmNewBet() {
             emitter.emit('confirmNewGame')
@@ -78,12 +108,137 @@ export default {
         },
         endProgress() {
             this.inProgress = false
+        },
+        async handleClaim() {
+            this.$store.commit('SET_MODAL', true)
+            this.$store.commit('SET_TITLE', 'Bid information')
+            this.$store.commit('SET_TYPE', 'info')
+            this.$store.commit('SET_CAPTION', 'Confirm this transaction in your wallet')
+            const contract = this.contract;
+            const address = this.address;
+            const id = this.id
+            try {
+                await contract.methods.claim(id).send({from: address}, (err, transactionHash) => {
+                    if(err) {
+                        console.log(err);
+                        this.$store.commit('SET_MODAL', false)
+                        this.$store.commit('SET_TITLE', '')
+                        this.$store.commit('SET_TYPE', '')
+                        this.$store.commit('SET_CAPTION', '')
+                        this.$store.commit('SET_FINISH_ID', '')
+                    }
+                    if(transactionHash) {
+                        emitter.emit('animateProgressBar')
+                        console.log(transactionHash)
+                    }
+                }).then(() => {
+                    this.$store.commit('SET_MODAL', false)
+                    this.$store.commit('SET_TITLE', '')
+                    this.$store.commit('SET_TYPE', '')
+                    this.$store.commit('SET_CAPTION', '')
+                    this.$store.commit('SET_FINISH_ID', '')
+                    emitter.emit('finishProgress')
+                })
+            } catch(err) {
+                this.$store.commit('SET_MODAL', false)
+                this.$store.commit('SET_TITLE', '')
+                this.$store.commit('SET_TYPE', '')
+                this.$store.commit('SET_CAPTION', '')
+                this.$store.commit('SET_FINISH_ID', '')
+                console.log("error: ", err)
+            }
         }
     }
 }
 </script>
 
 <style scoped>
+#gameover-win-base {
+    margin-bottom: 30px;
+    
+}
+
+#gameover-win-lose {
+    margin:auto;
+    text-align: center;
+}
+
+.gameover-win {
+    overflow: hidden;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+}
+
+.gameover-win-elem {
+    /* width: 150px;
+    height: 120px; */
+    display: inline-block;
+    text-align: left;
+    padding: 10px;
+    font-family: 'Press Start 2P';
+    font-style: normal;
+}
+
+#gameover-win-elem-text{
+    margin: auto;
+    max-width: 500px
+}
+
+#gameover-win-elem-text p {
+    margin: 25px;
+}
+
+#gameover-win-text {
+    color: #84D06E;
+    font-size: 32px;
+    font-weight: 500;
+}
+
+#gameover-lose-text {
+    color: #F27C2F;
+    font-size: larger;
+    font-family: 'Press Start 2P';
+    font-style: normal;
+    margin-bottom: 10px;
+}
+
+#gameover-win-second-text {
+    font-family: 'Orbitron';
+    font-size: 30px;
+    font-weight: 700;
+}
+
+#gameover-win-tokens {
+    color: #F27C2F;
+}
+
+#claim {
+    background-color: #F27C2F;
+    margin: auto;
+    height: 40px;
+    width: 25%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Press Start 2P';
+    font-style: normal;
+    font-weight: 200;
+    font-size: 20px;
+    -webkit-box-shadow: 6px 6px 0px 0px rgba(0, 0, 0, 0.9);
+    -moz-box-shadow: 6px 6px 0px 0px rgba(0, 0, 0, 0.9);
+    box-shadow: 3px 3px 0px 0px rgba(0, 0, 0, 0.9);
+    background: #F27C2F;
+}
+
+#claim:hover {
+    transition: 0.2s;
+    -webkit-box-shadow: 6px 6px 0px 0px rgba(0, 0, 0, 0.9);
+    -moz-box-shadow: 6px 6px 0px 0px rgba(0, 0, 0, 0.9);
+    box-shadow: 6px 6px 0px 0px rgba(0, 0, 0, 0.9);
+}
+
 h1 {
     margin-top: 32px;
     margin-bottom: 32px;
@@ -194,6 +349,8 @@ h2 {
 .maskot {
     margin-top: 32px;
     margin-bottom: 64px;
+    width: 100px;
+    min-width: 150px;
 }
 
 .closebtn {

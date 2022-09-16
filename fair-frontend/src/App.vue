@@ -17,6 +17,8 @@ import Web3 from 'web3'
 import network from './constants/chainId.json'
 import Web3Modal, { connectors } from 'web3modal'
 import WalletConnectProvider from '@walletconnect/web3-provider'
+import Fair from './abis/Fair.json'
+
 
 export default {
   name: 'App',
@@ -95,8 +97,8 @@ export default {
     },
     async checkMetamaskConnect() {
       if (window.ethereum) {
-        if (this.currentChain === network.chainId) {
-        // if (this.currentChain === network.chainIdTestnet) {
+        // if (this.currentChain === network.chainId) {
+        if (this.currentChain === network.chainIdTestnet) {
           const provider = new ethers.providers.Web3Provider(window.ethereum);
           const isMetaMaskConnected = async () => {
             let accounts = await provider.listAccounts();
@@ -129,46 +131,46 @@ export default {
             });
           } catch (error) {
             if (typeof window !== 'undefined') {
-                window.ethereum.request({
-                    jsonrpc: '2.0',
-                    method: 'wallet_addEthereumChain',
-                    params: [
-                        {
-                            chainId: network.chainId,
-                            chainName: 'Emerald Paratime Mainnet',
-                            rpcUrls: ['https://emerald.oasis.dev'],
-                            nativeCurrency: {
-                                name: 'ROSE',
-                                symbol: 'ROSE',
-                                decimals: 18
-                            },
-                            blockExplorerUrls: ['https://explorer.emerald.oasis.dev']
-                        }
-                    ],
-                    id: 0
-                }).then(() => {
-                  location.reload()
-                });
                 // window.ethereum.request({
                 //     jsonrpc: '2.0',
                 //     method: 'wallet_addEthereumChain',
                 //     params: [
                 //         {
                 //             chainId: network.chainId,
-                //             chainName: 'Emerald Paratime Testnet',
-                //             rpcUrls: ['https://testnet.emerald.oasis.dev'],
+                //             chainName: 'Emerald Paratime Mainnet',
+                //             rpcUrls: ['https://emerald.oasis.dev'],
                 //             nativeCurrency: {
                 //                 name: 'ROSE',
                 //                 symbol: 'ROSE',
                 //                 decimals: 18
                 //             },
-                //             blockExplorerUrls: ['https://testnet.explorer.emerald.oasis.dev']
+                //             blockExplorerUrls: ['https://explorer.emerald.oasis.dev']
                 //         }
                 //     ],
                 //     id: 0
                 // }).then(() => {
                 //   location.reload()
                 // });
+                window.ethereum.request({
+                    jsonrpc: '2.0',
+                    method: 'wallet_addEthereumChain',
+                    params: [
+                        {
+                            chainId: network.chainIdTest,
+                            chainName: 'Emerald Paratime Testnet',
+                            rpcUrls: ['https://testnet.emerald.oasis.dev'],
+                            nativeCurrency: {
+                                name: 'ROSE',
+                                symbol: 'ROSE',
+                                decimals: 18
+                            },
+                            blockExplorerUrls: ['https://testnet.explorer.emerald.oasis.dev']
+                        }
+                    ],
+                    id: 0
+                }).then(() => {
+                  location.reload()
+                });
             }
             // alert(error.message);
           }
@@ -192,6 +194,7 @@ export default {
         return
       }
       else {
+        await this.listenForGameEnd()
         await this.displayBalance(web3, address);
         await this.getUserGames(contract, address)
         this.getActualGames(contract, address)
@@ -308,6 +311,40 @@ export default {
       if (address !== null && address !== undefined) {
         this.$store.commit('SET_USER', address)
       }
+    },
+
+    async listenForGameEnd() {
+      const provider = new ethers.providers.Web3Provider(window.ethereum)
+      await provider.send("eth_requestAccounts", []);
+      const signer = provider.getSigner()
+      const _contract = new ethers.Contract(this.$store.state.fairAddress, Fair.abi, signer)
+      console.log(_contract.address)
+      // _contract.on("FinishGame", async (gameId, winners, prizes) => {
+      //   const gameParticipatedFlag = (await _contract.biddersList(gameId.toString(), signer.getAddress())).participatedFlag
+      //   if (gameParticipatedFlag) {
+      //     const address = await signer.getAddress()
+      //     const winnerClaimed = await _contract.prizeList(address, gameId.toString())
+      //     console.log(winnerClaimed)
+      //     if (winnerClaimed.isClaimed == false) {
+      //         if (winners.includes(address)) {
+      //           const index = winners.indexOf(address)
+      //           const prize = prizes[index].toString()
+                this.$store.commit('SET_MODAL', true)
+                this.$store.commit('SET_TITLE', 'Game over')
+                this.$store.commit('SET_TYPE', 'gameover-win')
+                // this.$store.commit('SET_AMOUNT', ethers.utils.formatEther(prize))
+                // this.$store.commit('SET_FINISH_ID', gameId.toString())
+                this.$store.commit('SET_AMOUNT', ethers.utils.formatEther('10700000000000000000'))
+                this.$store.commit('SET_FINISH_ID', '0')
+      //         } else {
+      //           this.$store.commit('SET_MODAL', true)
+      //           this.$store.commit('SET_TITLE', 'Game over')
+      //           this.$store.commit('SET_TYPE', 'gameover-lose')
+      //         }
+      //     }
+      //   }
+      // })
+     
     }
   }
 }
