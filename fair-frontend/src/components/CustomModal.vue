@@ -155,7 +155,7 @@ export default {
 <style scoped>
 #gameover-win-base {
     margin-bottom: 30px;
-    
+    width: 565px;
 }
 
 #gameover-win-lose {
@@ -185,27 +185,28 @@ export default {
     max-width: 500px
 }
 
-#gameover-win-elem-text p {
+/*#gameover-win-elem-text p {
     margin: 25px;
-}
+}*/
 
 #gameover-win-text {
     color: #84D06E;
-    font-size: 32px;
+    font-size: 20px;
     font-weight: 500;
+    margin-bottom: 20px;
 }
 
 #gameover-lose-text {
-    color: #F27C2F;
-    font-size: larger;
+    color: #FF5C5C;
+    font-size: 20px;
     font-family: 'Press Start 2P';
     font-style: normal;
-    margin-bottom: 10px;
+    margin-bottom: 42px;
 }
 
 #gameover-win-second-text {
     font-family: 'Orbitron';
-    font-size: 30px;
+    font-size: 20px;
     font-weight: 700;
 }
 
@@ -216,6 +217,7 @@ export default {
 #claim {
     background-color: #F27C2F;
     margin: auto;
+    cursor: pointer;
     height: 40px;
     width: 25%;
     display: flex;
@@ -277,7 +279,7 @@ h2 {
     display: flex;
     flex-direction: column;
     align-items: center;
-    min-width: 75%;
+    min-width: 500px;
     background: #ffffff;
     min-height: 300px;
     border: 8px solid #000000;}
@@ -353,6 +355,11 @@ h2 {
     min-width: 150px;
 }
 
+.gameover-win-elem .maskot {
+    margin: 0;
+    margin-right: 24px;
+}
+
 .closebtn {
     cursor: pointer;
 }
@@ -403,6 +410,7 @@ h2 {
 
     .modal-box {
         max-width: 90%;
+        min-width: 75%;
     }
 
     .maskot {
