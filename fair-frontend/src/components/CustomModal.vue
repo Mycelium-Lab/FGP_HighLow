@@ -411,6 +411,37 @@ h2 {
     .modal-box {
         max-width: 90%;
         min-width: 75%;
+        min-height: 150px;
+    }
+
+    #gameover-win-base {
+        width: auto;
+    }
+
+    .gameover-win {
+        display: flex;
+        flex-direction: column;
+    }
+
+    #gameover-win-text {
+        text-align: center;
+        font-size: 14px;
+    }
+
+    #gameover-win-second-text {
+        text-align: center;
+        font-size: 14px;
+    }
+
+    .gameover-win-elem .maskot, #gameover-win-lose .maskot {
+        display: none;
+    }
+
+    #claim {
+        font-size: 14px;
+        width: auto;
+        padding-left: 8px;
+        padding-right: 8px;
     }
 
     .maskot {
