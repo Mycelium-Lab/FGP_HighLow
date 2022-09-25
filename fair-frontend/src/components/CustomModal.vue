@@ -23,20 +23,23 @@
                             <p id="gameover-win-second-text">You <span id="gameover-win-tokens">won {{modalAmount}} Tokens</span></p>
                         </div>
                         <div class="gameover-win-elem">
-                            <img class="maskot" src="../assets/maskot.png">
+                            <img class="maskot" src="../../public/Gif/vinperson.gif">
                         </div>
                     </div>
                     <button @click="handleClaim()" id="claim">CLAIM</button>
                 </div>
                 <div id="gameover-win-lose" v-if="modalType === 'gameover-lose'">
-                    <img class="maskot" src="../assets/maskot.png">
+                    <img class="maskot" src="../../public/Gif/lose.gif">
                     <p id="gameover-lose-text">You LOSE!</p>
                 </div>
-                <img class="maskot" v-if="modalType === 'rules'||(modalType === 'info' && this.inProgress === false)" src="../assets/maskot.png">
+                <img class="maskot" v-if="modalType === 'rules'||(modalType === 'info' && this.inProgress === false) "  src="../../public/Gif/maskot.gif">
+                 <img class="maskot" v-if="modalType === 'rules'||(modalType === 'info' && this.inProgress === false) "  src="../../public/Gif/maskot.gif">
+                
+
                 <img class="load" v-else-if="modalType === 'info' && this.inProgress === true" src="../assets/icons/time.png">
                 <div v-if="modalType === 'confirm'" class="button-wrapper">
                     <button @click="handleClose()" class="modalbtn">NO</button>
-                    <button @click="confirmNewBet()" class="modalbtn orange">YES</button>
+                    <button @click="confirmNewBet()" class="modalbtn ">YES</button>
                 </div>
             </div>
         </div>
@@ -46,7 +49,6 @@
 <script>
 import store from '../store'
 import emitter from '../main'
-
 export default {
     name: 'CustomModal',
     store,
@@ -351,7 +353,7 @@ h2 {
 .maskot {
     margin-top: 32px;
     margin-bottom: 64px;
-    width: 100px;
+    width: 297px;
     min-width: 150px;
 }
 

@@ -1,7 +1,12 @@
+
 <template>
   <div class="page">
     <div class="game">
       <h1>START NEW GAME</h1>
+      <div class="gameContainer">
+        <div>
+          <img class="gameContainer__img" src="../../public/Gif/runnig_chip.gif" alt="">
+        </div>
       <div class="newgame">
         <div class="newgame-form">
           <div class="newgame-form-unit">
@@ -29,6 +34,10 @@
         <button @click="promptCreate()" class="newgame-start">
           PLAY
         </button>
+      </div>
+        <div>
+          <img class="gameContainer__img" style="transform: scaleX(-1)" src="../../public/Gif/singign_card.gif" alt="">
+        </div>
       </div>
       <h2 @click="openRules()">Game rules</h2>
     </div>
@@ -211,7 +220,16 @@ h2:hover {
   border-top: 0;
   box-sizing: border-box;
 }
-
+.gameContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center
+  
+}
+.gameContainer__img{
+  width: fit-content;
+  height: fit-content;
+}
 .newgame {
   background: #F27C2F;
   padding: 52px 62px;
@@ -297,10 +315,15 @@ h2:hover {
 
 .newgame-start:hover {
   transition: 0.2s;
-  -webkit-box-shadow: 6px 6px 0px 0px rgba(255, 255, 255, 0.9);
-  -moz-box-shadow: 6px 6px 0px 0px rgba(255, 255, 255, 0.9);
-  box-shadow: 6px 6px 0px 0px rgba(255, 255, 255, 0.9);
+  border: 2px solid black;
+  color: #000000;
+  text-shadow: 2px 3px 0px #F2C94C;
+  -webkit-box-shadow: 6px 6px 0px 0px rgba(0, 0, 0, 0.9);
+  -moz-box-shadow: 6px 6px 0px 0px rgba(0, 0, 0, 0.9);
+  box-shadow: 6px 6px 0px 0px rgba(0, 0, 0, 0.9);
 }
+  
+
 
 .newgame-start:active {
   transition: 0.1s;
