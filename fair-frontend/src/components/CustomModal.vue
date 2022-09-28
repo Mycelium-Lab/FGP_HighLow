@@ -33,14 +33,11 @@
                     <p id="gameover-lose-text">You LOSE!</p>
                 </div>
                 <img class="maskot" v-if="modalType === 'rules'||(modalType === 'info' && this.inProgress === false) "  src="../../public/Gif/maskot.gif">
-                 <img class="maskot" v-if="modalType === 'rules'||(modalType === 'info' && this.inProgress === false) "  src="../../public/Gif/maskot.gif">
-                
-
                 <img class="load" v-else-if="modalType === 'info' && this.inProgress === true" src="../assets/icons/time.png">
                 <div v-if="modalType === 'confirm'" class="button-wrapper">
                     <button @click="handleClose()" class="modalbtn">NO</button>
                     <button @click="confirmNewBet()" class="modalbtn ">YES</button>
-                </div>
+                </div>  
             </div>
         </div>
     </div>

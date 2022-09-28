@@ -287,6 +287,7 @@ export default {
     -webkit-box-shadow: 6px 6px 0px 0px rgba(0, 0, 0, 0.9);
     -moz-box-shadow: 6px 6px 0px 0px rgba(0, 0, 0, 0.9);
     box-shadow: 6px 6px 0px 0px rgba(0, 0, 0, 0.9);
+    filter: drop-shadow(1px 4px 10px #699bf7);
 }
 
 .usergame_btn:active {
