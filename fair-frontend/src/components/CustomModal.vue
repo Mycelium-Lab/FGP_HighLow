@@ -9,18 +9,28 @@
                 <h1>{{ modalTitle }}</h1>
                 <h2 v-if="modalType === 'info'||modalType === 'confirm'">{{ modalCaption }}</h2>
                 <div v-if="modalType === 'rules'" class="modal-rules">
-                    <span class="modal-rule">1. Any user can create a new game by placing a bet in tokens and choosing a random number from 0 to 100;</span>
-                    <span class="modal-rule">2. The game is created. During 1 minutes other users can join this game by choosing their number (they can choose the same number as the game creator). In doing so, they will need to make the same bet as the creator of the game (because the creator of the game sets the bet for any players wishing to join it);</span>
-                    <span class="modal-rule">3. The game creator can limit the number of participants in the game, if desired;</span>
-                    <span class="modal-rule">4. After 5 minute the game starts and ends. The computer randomly chooses a number. Users, whose number was closest to the number selected by the computer - won. Users, whose figure was farthest from the number selected by the computer - lost;</span>
-                    <span class="modal-rule modal-specialrule">The winners are 30% of users who made the closest bet to the number chosen by the computer (but not less than 1 person), the rest - lost.</span>
-                    <span class="modal-rule">5. Bets made by users form a prize pool. At the end of the game the prize pool is distributed equally among the winners.</span>
+                    <span class="modal-rule">1. Any user can create a new game by placing a bet in tokens and choosing a
+                        random number from 0 to 100;</span>
+                    <span class="modal-rule">2. The game is created. During 1 minutes other users can join this game by
+                        choosing their number (they can choose the same number as the game creator). In doing so, they
+                        will need to make the same bet as the creator of the game (because the creator of the game sets
+                        the bet for any players wishing to join it);</span>
+                    <span class="modal-rule">3. The game creator can limit the number of participants in the game, if
+                        desired;</span>
+                    <span class="modal-rule">4. After 5 minute the game starts and ends. The computer randomly chooses a
+                        number. Users, whose number was closest to the number selected by the computer - won. Users,
+                        whose figure was farthest from the number selected by the computer - lost;</span>
+                    <span class="modal-rule modal-specialrule">The winners are 30% of users who made the closest bet to
+                        the number chosen by the computer (but not less than 1 person), the rest - lost.</span>
+                    <span class="modal-rule">5. Bets made by users form a prize pool. At the end of the game the prize
+                        pool is distributed equally among the winners.</span>
                 </div>
                 <div id="gameover-win-base" v-if="modalType === 'gameover-win'">
                     <div class="gameover-win">
                         <div class="gameover-win-elem" id="gameover-win-elem-text">
                             <p id="gameover-win-text">You WIN!</p>
-                            <p id="gameover-win-second-text">You <span id="gameover-win-tokens">won {{modalAmount}} Tokens</span></p>
+                            <p id="gameover-win-second-text">You <span id="gameover-win-tokens">won {{modalAmount}}
+                                    Tokens</span></p>
                         </div>
                         <div class="gameover-win-elem">
                             <img class="maskot" src="../../public/Gif/vinperson.gif">
@@ -32,24 +42,28 @@
                     <img class="maskot" src="../../public/Gif/lose.gif">
                     <p id="gameover-lose-text">You LOSE!</p>
                 </div>
-                <img class="maskot" v-if="modalType === 'rules'||(modalType === 'info' && this.inProgress === false) "  src="../../public/Gif/maskot.gif">
-                <img class="load" v-else-if="modalType === 'info' && this.inProgress === true" src="../assets/icons/time.png">
+                <div v-if="modalType === 'rules'||(modalType === 'info' && this.inProgress === false) ">
+                    <img class="maskot" src="../../public/Gif/maskot.gif">
+                    <img class="maskot-mobile" src="../../public/Gif/guys.gif">
+                </div>
+                <img class="load" v-else-if="modalType === 'info' && this.inProgress === true"
+                    src="../assets/icons/time.png">
                 <div v-if="modalType === 'confirm'" class="button-wrapper">
                     <button @click="handleClose()" class="modalbtn">NO</button>
                     <button @click="confirmNewBet()" class="modalbtn ">YES</button>
-                </div>  
+                </div>
             </div>
         </div>
     </div>
 </template>
 
 <script>
-import store from '../store'
 import emitter from '../main'
+import store from '../store'
 export default {
     name: 'CustomModal',
     store,
-    data () {
+    data() {
         return {
             inProgress: false
         }
@@ -63,28 +77,28 @@ export default {
         })
     },
     computed: {
-        modalTitle: function() {
+        modalTitle: function () {
             return this.$store.state.modalTitle
         },
-        modalType: function() {
+        modalType: function () {
             return this.$store.state.modalType
         },
-        modalAmount: function() {
+        modalAmount: function () {
             return this.$store.state.modalAmount
         },
-        modalCaption: function() {
+        modalCaption: function () {
             return this.$store.state.modalCaption
         },
-        active: function() {
+        active: function () {
             return this.$store.state.modal
         },
-        contract: function() {
+        contract: function () {
             return this.$store.state.fairContract
         },
-        address: function() {
+        address: function () {
             return this.$store.state.user
         },
-        id: function() {
+        id: function () {
             return this.$store.state.modalFinishID
         },
     },
@@ -117,8 +131,8 @@ export default {
             const address = this.address;
             const id = this.id
             try {
-                await contract.methods.claim(id).send({from: address}, (err, transactionHash) => {
-                    if(err) {
+                await contract.methods.claim(id).send({ from: address }, (err, transactionHash) => {
+                    if (err) {
                         console.log(err);
                         this.$store.commit('SET_MODAL', false)
                         this.$store.commit('SET_TITLE', '')
@@ -126,7 +140,7 @@ export default {
                         this.$store.commit('SET_CAPTION', '')
                         this.$store.commit('SET_FINISH_ID', '')
                     }
-                    if(transactionHash) {
+                    if (transactionHash) {
                         emitter.emit('animateProgressBar')
                         console.log(transactionHash)
                     }
@@ -138,7 +152,7 @@ export default {
                     this.$store.commit('SET_FINISH_ID', '')
                     emitter.emit('finishProgress')
                 })
-            } catch(err) {
+            } catch (err) {
                 this.$store.commit('SET_MODAL', false)
                 this.$store.commit('SET_TITLE', '')
                 this.$store.commit('SET_TYPE', '')
@@ -158,7 +172,7 @@ export default {
 }
 
 #gameover-win-lose {
-    margin:auto;
+    margin: auto;
     text-align: center;
 }
 
@@ -179,7 +193,7 @@ export default {
     font-style: normal;
 }
 
-#gameover-win-elem-text{
+#gameover-win-elem-text {
     margin: auto;
     max-width: 500px
 }
@@ -245,6 +259,7 @@ h1 {
     margin-bottom: 32px;
     text-align: center;
 }
+
 h2 {
     font-family: 'Orbitron';
     font-style: normal;
@@ -254,11 +269,13 @@ h2 {
     color: #2C2F33;
     text-align: center;
 }
+
 .modal {
     display: none;
     overflow-y: scroll;
     z-index: 1000;
 }
+
 .modalActive {
     display: flex;
     flex-direction: row;
@@ -268,8 +285,9 @@ h2 {
     width: 100%;
     min-height: 100vh;
     height: 100%;
-    background-color: rgba(0,0,0,0.3)
+    background-color: rgba(0, 0, 0, 0.3)
 }
+
 .modal-box {
     z-index: 1050;
     max-width: 1010px;
@@ -281,7 +299,8 @@ h2 {
     min-width: 500px;
     background: #ffffff;
     min-height: 300px;
-    border: 8px solid #000000;}
+    border: 8px solid #000000;
+}
 
 .modal-header {
     padding: 14px;
@@ -339,9 +358,11 @@ h2 {
     0% {
         transform: rotate(0deg);
     }
+
     50% {
         transform: rotate(180deg);
     }
+
     100% {
         transform: rotate(360deg);
     }
@@ -352,6 +373,27 @@ h2 {
     margin-bottom: 64px;
     width: 297px;
     min-width: 150px;
+}
+
+.maskot-mobile {
+    margin-top: 32px;
+    margin-bottom: 64px;
+    display: none;
+    width: 297px;
+    min-width: 150px;
+}
+
+@media screen and (max-width: 465px) {
+    .maskot {
+        display: none;
+    }
+
+}
+
+@media screen and (max-width : 466px) {
+    .maskot-mobile {
+        display: unset;
+    }
 }
 
 .gameover-win-elem .maskot {
@@ -432,7 +474,8 @@ h2 {
         font-size: 14px;
     }
 
-    .gameover-win-elem .maskot, #gameover-win-lose .maskot {
+    .gameover-win-elem .maskot,
+    #gameover-win-lose .maskot {
         display: none;
     }
 
@@ -441,10 +484,6 @@ h2 {
         width: auto;
         padding-left: 8px;
         padding-right: 8px;
-    }
-
-    .maskot {
-        width: 50%;
     }
 
     .modal-rule {

@@ -6,34 +6,35 @@
         <div>
           <img class="gameContainer__img" src="../../public/Gif/runnig_chip.gif" alt="">
         </div>
-      <div class="newgame">
-        <div class="newgame-form">
-          <div class="newgame-form-unit">
-            <span>Guess a number</span><input pattern="[0,9]{1,3}" v-model="startgamenumber" min="1" max="100" type="number"/>
+        <div class="newgame">
+          <div class="newgame-form">
+            <div class="newgame-form-unit">
+              <span>Guess a number</span><input pattern="[0,9]{1,3}" v-model="startgamenumber" min="1" max="100"
+                type="number" />
+            </div>
+            <div class="newgame-form-unit">
+              <span>Your bid</span><input v-model="startgamebid" min="0" type="number" /><span>ROSE</span>
+            </div>
+            <div class="newgame-form-unit">
+              <span>Limit of players</span>
+              <select v-model="startgameplayercount">
+                <option selected="selected" value="0">Unlimited</option>
+                <option>2</option>
+                <option>3</option>
+                <option>4</option>
+                <option>5</option>
+                <option>6</option>
+                <option>7</option>
+                <option>8</option>
+                <option>9</option>
+                <option>10</option>
+              </select>
+            </div>
           </div>
-          <div class="newgame-form-unit">
-            <span>Your bid</span><input v-model="startgamebid" min="0" type="number"/><span>ROSE</span>
-          </div>
-          <div class="newgame-form-unit">
-            <span>Limit of players</span>
-            <select v-model="startgameplayercount">
-              <option selected="selected" value="0">Unlimited</option>
-              <option>2</option>
-              <option>3</option>
-              <option>4</option>
-              <option>5</option>
-              <option>6</option>
-              <option>7</option>
-              <option>8</option>
-              <option>9</option>
-              <option>10</option>
-            </select>
-          </div>
+          <button @click="promptCreate()" class="newgame-start">
+            PLAY
+          </button>
         </div>
-        <button @click="promptCreate()" class="newgame-start">
-          PLAY
-        </button>
-      </div>
         <div>
           <img class="gameContainer__img" style="transform: scaleX(-1)" src="../../public/Gif/singign_card.gif" alt="">
         </div>
@@ -43,26 +44,19 @@
     <div id="#current" v-if="games[0]" class="currentgames-wrapper">
       <h1>Current games</h1>
       <div id="currentGames" class="currentgames">
-        <ActiveGame class="activegame" v-for="game in games" :key="game[3]"
-        :bid="game[0]"
-        :timestamp="game[1]"
-        :participants="game[2]"
-        :id="game[3]"
-        :limit="game[4]"
-        :owner="game[5]"
-        :joined="game[6]"
-        :chosenNumber="game[7]"
-        />
+        <ActiveGame class="activegame" v-for="game in games" :key="game[3]" :bid="game[0]" :timestamp="game[1]"
+          :participants="game[2]" :id="game[3]" :limit="game[4]" :owner="game[5]" :joined="game[6]"
+          :chosenNumber="game[7]" />
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import ActiveGame from './ActiveGame.vue'
-import {ethers, BigNumber} from 'ethers'
-import store from '../store'
+import { BigNumber, ethers } from 'ethers'
 import emitter from '../main'
+import store from '../store'
+import ActiveGame from './ActiveGame.vue'
 
 export default {
   name: 'CurrentGame',
@@ -70,7 +64,7 @@ export default {
   components: {
     ActiveGame
   },
-  data () {
+  data() {
     return {
       abi: null,
       startgamenumber: '',
@@ -79,19 +73,19 @@ export default {
     }
   },
   computed: {
-    balance: function() {
+    balance: function () {
       return this.$store.state.balance;
     },
-    web3: function() {
+    web3: function () {
       return this.$store.state.web3;
     },
-    contract: function() {
+    contract: function () {
       return this.$store.state.fairContract;
     },
-    address: function() {
+    address: function () {
       return this.$store.state.user;
     },
-    games: function() {
+    games: function () {
       return this.$store.state.games;
     }
   },
@@ -102,11 +96,11 @@ export default {
   },
   methods: {
     async promptCreate() {
-      if (window.ethereum && this.address 
-          && (this.startgamebid != 0)
-          && (this.startgamenumber > 0 && this.startgamenumber < 101) 
-          && (Number.isInteger(this.startgamenumber))
-          && (this.startgameplayercount > -1 && this.startgameplayercount < 11 && this.startgameplayercount !== 1)
+      if (window.ethereum && this.address
+        && (this.startgamebid != 0)
+        && (this.startgamenumber > 0 && this.startgamenumber < 101)
+        && (Number.isInteger(this.startgamenumber))
+        && (this.startgameplayercount > -1 && this.startgameplayercount < 11 && this.startgameplayercount !== 1)
       ) {
         this.$store.commit('SET_MODAL', true)
         this.$store.commit('SET_TITLE', 'Bid')
@@ -139,14 +133,14 @@ export default {
       const number = this.startgamenumber;
       const limit = this.startgameplayercount;
       const bid = this.startgamebid
-      if (window.ethereum && this.address 
-          && (bid != 0)
-          && (number > 0 && number < 101) 
-          && (Number.isInteger(number))
-          && (limit > -1 && limit < 11 && limit !== 1)
+      if (window.ethereum && this.address
+        && (bid != 0)
+        && (number > 0 && number < 101)
+        && (Number.isInteger(number))
+        && (limit > -1 && limit < 11 && limit !== 1)
       ) {
-        try{
-          await contract.methods.createGame(BigNumber.from(number), BigNumber.from(limit)).send({from: address, value: ethers.utils.parseEther((bid).toString())}, (err, transactionHash) => {
+        try {
+          await contract.methods.createGame(BigNumber.from(number), BigNumber.from(limit)).send({ from: address, value: ethers.utils.parseEther((bid).toString()) }, (err, transactionHash) => {
             if (err) {
               this.$store.commit('SET_MODAL', false)
               this.$store.commit('SET_TITLE', '')
@@ -168,12 +162,12 @@ export default {
             this.$store.commit('SET_CAPTION', '')
             emitter.emit('finishProgress')
           });
-        } catch(err) {
-            this.$store.commit('SET_MODAL', false)
-            this.$store.commit('SET_TITLE', '')
-            this.$store.commit('SET_TYPE', '')
-            this.$store.commit('SET_CAPTION', '')
-            console.log("error: ", err)
+        } catch (err) {
+          this.$store.commit('SET_MODAL', false)
+          this.$store.commit('SET_TITLE', '')
+          this.$store.commit('SET_TYPE', '')
+          this.$store.commit('SET_CAPTION', '')
+          console.log("error: ", err)
         }
       }
     },
@@ -189,7 +183,6 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-
 h2 {
   font-family: 'Orbitron';
   font-style: normal;
@@ -202,13 +195,16 @@ h2 {
   margin-bottom: 78px;
   cursor: pointer;
 }
+
 h2:hover {
   transition: 0.2s;
   color: #000000;
 }
+
 .page {
   width: 100%;
 }
+
 .game {
   padding-top: 68px;
   width: 100%;
@@ -219,16 +215,24 @@ h2:hover {
   border-top: 0;
   box-sizing: border-box;
 }
+
 .gameContainer {
   display: flex;
   flex-direction: row;
   align-items: center
-  
 }
-.gameContainer__img{
-  width: fit-content;
+
+@media screen and (max-width: 969px) {
+  .gameContainer__img {
+    display: none;
+  }
+}
+
+.gameContainer__img {
+  width: 100%;
   height: fit-content;
 }
+
 .newgame {
   background: #F27C2F;
   padding: 52px 62px;
@@ -321,7 +325,7 @@ h2:hover {
   -moz-box-shadow: 6px 6px 0px 0px rgba(0, 0, 0, 0.9);
   box-shadow: 6px 6px 0px 0px rgba(0, 0, 0, 0.9);
 }
-  
+
 
 
 .newgame-start:active {
@@ -347,6 +351,7 @@ h2:hover {
 .currentgames-wrapper h1 {
   align-self: center;
 }
+
 .currentgames {
   margin-top: 48px;
   display: grid;
