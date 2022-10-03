@@ -353,7 +353,7 @@ h2:hover {
 }
 
 .currentgames {
-  margin-top: 15px;
+  margin-top: 25px;
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-template-rows: 1fr 1fr;
@@ -367,6 +367,7 @@ h2:hover {
   .currentgames {
     display: flex;
     flex-direction: column;
+    margin-top: 14px;
   }
 }
 

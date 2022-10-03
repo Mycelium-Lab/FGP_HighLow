@@ -33,7 +33,7 @@
                                     Tokens</span></p>
                         </div>
                         <div class="gameover-win-elem">
-                            <img class="maskot" src="../../public/Gif/vinperson.gif ">
+                            <img class="maskot" src="../../public/Gif/zerkalo.gif">
                         </div>
                     </div>
                     <button @click="handleClaim()" id="claim">CLAIM</button>
@@ -353,11 +353,15 @@ h2 {
 }
 
 .load {
-    margin-top: 32px;
+    margin-top: 64px;
     animation: spin 1s infinite ease-in-out;
-    margin-bottom: 32px;
+   }
+@media screen and (max-width: 465px) {
+    .load {
+     margin-bottom: 32px;   
+     margin-top: 32px;
+    }
 }
-
 @keyframes spin {
     0% {
         transform: rotate(0deg);
