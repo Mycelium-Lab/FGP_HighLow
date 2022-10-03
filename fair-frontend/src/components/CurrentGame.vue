@@ -361,6 +361,7 @@ h2:hover {
   justify-items: center;
   align-items: center;
 }
+  
 
 @media screen and (max-width: 1000px) {
   .currentgames {

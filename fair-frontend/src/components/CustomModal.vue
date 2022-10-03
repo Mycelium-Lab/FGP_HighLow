@@ -33,7 +33,7 @@
                                     Tokens</span></p>
                         </div>
                         <div class="gameover-win-elem">
-                            <img class="maskot" src="../../public/Gif/vinperson.gif">
+                            <img class="maskot" src="../../public/Gif/vinperson.gif ">
                         </div>
                     </div>
                     <button @click="handleClaim()" id="claim">CLAIM</button>
@@ -43,7 +43,7 @@
                     <p id="gameover-lose-text">You LOSE!</p>
                 </div>
                 <div v-if="modalType === 'rules'||(modalType === 'info' && this.inProgress === false) ">
-                    <img class="maskot" src="../../public/Gif/maskot.gif">
+                    <img class="maskot" src="../../public/Gif/guys.gif" width="160 px">
                     <img class="maskot-mobile" src="../../public/Gif/guys.gif">
                 </div>
                 <img class="load" v-else-if="modalType === 'info' && this.inProgress === true"
@@ -179,7 +179,7 @@ export default {
 .gameover-win {
     overflow: hidden;
     display: flex;
-    flex-direction: row;
+    flex-direction: row-reverse;
     flex-wrap: nowrap;
 }
 
@@ -191,6 +191,9 @@ export default {
     padding: 10px;
     font-family: 'Press Start 2P';
     font-style: normal;
+}
+.maskot {
+    width: 65%;
 }
 
 #gameover-win-elem-text {
@@ -352,6 +355,7 @@ h2 {
 .load {
     margin-top: 32px;
     animation: spin 1s infinite ease-in-out;
+    margin-bottom: 32px;
 }
 
 @keyframes spin {
@@ -370,8 +374,8 @@ h2 {
 
 .maskot {
     margin-top: 32px;
-    margin-bottom: 64px;
-    width: 297px;
+    margin-bottom: 32px;
+    width: 200px;
     min-width: 150px;
 }
 
@@ -407,6 +411,7 @@ h2 {
 
 .button-wrapper {
     margin-top: 16px;
+    margin-bottom: 16px;
 }
 
 .modalbtn {
@@ -491,5 +496,8 @@ h2 {
         line-height: 16px;
         margin: 14px;
     }
+}
+.gameover-win-elem {
+    width: 70%;
 }
 </style>
