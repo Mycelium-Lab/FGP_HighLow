@@ -370,6 +370,8 @@ h1 {
   font-size: 25px;
   line-height: 25px;
   color: #000000;
+  margin-bottom: 15px;
+
 }
 body {
   background: #F5F5F5;
