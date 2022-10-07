@@ -8,7 +8,7 @@
             <div class="modal-body">
                 <h1>{{ modalTitle }}</h1>
                 <div v-if="modalType === 'wallet_required'" class="modal-rule">Please connect your <a href="https://metamask.io/" target="_blank">Metamask</a> wallet </div>
-                <div v-if="modalType === 'wallet_bot_connected'" class="modal-rule">Please connect wallet</div>
+                <div v-if="modalType === 'wallet_bot_connected'" class="modal-rule">Please, connect your wallet</div>
                 <button v-if="modalType === 'wallet_bot_connected'" @click="handleClose()" class="modalbtn">OK</button>
                 <h2 v-if="modalType === 'info'||modalType === 'confirm'">{{ modalCaption }}</h2>
                 <div v-if="modalType === 'rules'" class="modal-rules">
