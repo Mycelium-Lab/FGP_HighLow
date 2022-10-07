@@ -8,7 +8,8 @@
             <div class="modal-body">
                 <h1>{{ modalTitle }}</h1>
                 <div v-if="modalType === 'wallet_required'" class="modal-rule">Please connect your <a href="https://metamask.io/" target="_blank">Metamask</a> wallet </div>
-               
+                <div v-if="modalType === 'wallet_bot_connected'" class="modal-rule">Please connect wallet</div>
+                <button v-if="modalType === 'wallet_bot_connected'" @click="handleClose()" class="modalbtn">OK</button>
                 <h2 v-if="modalType === 'info'||modalType === 'confirm'">{{ modalCaption }}</h2>
                 <div v-if="modalType === 'rules'" class="modal-rules">
                     <span class="modal-rule">1. Any user can create a new game by placing a bet in tokens and choosing a
