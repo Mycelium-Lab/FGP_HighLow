@@ -62,6 +62,11 @@ export default {
   },
   methods: {
     async launchApp() {
+      if (window.ethereum === undefined) {
+        this.$store.commit('SET_MODAL', true)
+        this.$store.commit('SET_TITLE', 'Web3 Wallet required')
+        this.$store.commit('SET_TYPE', 'wallet_required')
+      }
       const web3 = new Web3(window.ethereum);
       this.$store.commit('SET_WEB3', web3);
       const providerOptions = {
