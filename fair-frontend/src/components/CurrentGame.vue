@@ -121,6 +121,10 @@ export default {
         this.$store.commit('SET_TITLE', 'Error')
         this.$store.commit('SET_TYPE', 'info')
         this.$store.commit('SET_CAPTION', 'Wrong participants limit')
+      } else if (this.address == null) {
+        this.$store.commit('SET_MODAL', true)
+        this.$store.commit('SET_TITLE', 'Alert')
+        this.$store.commit('SET_TYPE', 'wallet_bot_connected')
       }
     },
     async handleCreate() {
