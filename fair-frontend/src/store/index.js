@@ -34,9 +34,13 @@ export default createStore({
     {
       state.balance = balance
     },
-    SET_GAMES(state, games)
+    SET_GAMES(state, game)
     {
-      state.games = games
+      state.games.push(game)
+    },
+    DELETE_GAMES(state, game)
+    {
+      state.games = state.games.filter((v) => v[3] != game[3])
     },
     SET_PAST_GAMES(state, games)
     {
