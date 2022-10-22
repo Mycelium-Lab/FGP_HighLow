@@ -61,7 +61,6 @@ export default {
         }
         this.updateTime()
         this.updateBet()
-        console.log(this.id)
     },
     computed: {
         web3: function() {
@@ -124,8 +123,6 @@ export default {
         updateBet() {
             setTimeout(async () => {
                 this.updateBet()
-                console.log(this.joinbtn_text.length)
-                console.log(this.chosenNumberState)
                 await this.getBets()
             }, 3000)
         },
