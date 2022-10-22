@@ -10,18 +10,21 @@
             <div class="info_row">
                 <span class="info_row-title">Number of players: </span><span class="info_row-value">{{participants}} / {{processedLimit}}</span>
             </div>
-            <div v-if="joined === false && participants != limit" class="info_row">
+            <div v-if="joined === false && participants != limit && joinbtn_text.length === 0" class="info_row">
                 <span class="info_row-title">Your number: </span><input class="info_row-input" type="text" v-model="number"/>
             </div>
-            <div v-else-if="participants != limit" class="info_row">
-                <span class="info_row-title">Your number: </span><span class="info_row-value">{{chosenNumber}}</span>
+            <div v-else-if="chosenNumberState !== null || participants != limit" class="info_row">
+                <span class="info_row-title">Your number: </span><span class="info_row-value">{{chosenNumberState !== null ? chosenNumberState : chosenNumber}}</span>
             </div>
             <div v-if="bets[0]" class="info_row">
                 <span class="info_row-title">Current bets: </span><span class="info_row-value">{{bets}}</span>
             </div>
         </div>
         <div class="button-wrapper">
-            <button v-bind:class="{joinbtndisabled: ownedGame === true || participants == limit, joinbtnwaiting: ownedGame === false && joined === true}" @click="handleJoin()" class="join_btn">{{joinBtnText}}</button>
+            <button v-bind:class="{
+                joinbtndisabled: ownedGame === true || participants == limit, 
+                joinbtnwaiting: ownedGame === false && (userJoinThisGame === null ? joined === true: userJoinThisGame === true)
+                }" @click="handleJoin()" class="join_btn">{{joinbtn_text.length === 0 ? joinBtnText : joinbtn_text}}</button>
         </div>
     </div>
 </template>
@@ -37,6 +40,8 @@ export default {
             currentTime: Date.now(),
             number: '',
             joinbtn_text: '',
+            chosenNumberState: null,
+            userJoinThisGame: null,
             bets: []
         }
     },
@@ -54,6 +59,9 @@ export default {
         if (this.owner) {
             this.getBets();
         }
+        this.updateTime()
+        this.updateBet()
+        console.log(this.id)
     },
     computed: {
         web3: function() {
@@ -107,6 +115,20 @@ export default {
         }
     },
     methods: {
+        updateTime() {
+            setTimeout(() => {
+                this.updateTime()
+                this.currentTime = Date.now()
+            }, 1000)
+        },
+        updateBet() {
+            setTimeout(async () => {
+                this.updateBet()
+                console.log(this.joinbtn_text.length)
+                console.log(this.chosenNumberState)
+                await this.getBets()
+            }, 3000)
+        },
         handleJoin: async function() {
             const contract = this.contract;
             const address = this.address;
@@ -172,6 +194,9 @@ export default {
                     this.$store.commit('SET_TITLE', '')
                     this.$store.commit('SET_TYPE', '')
                     this.$store.commit('SET_CAPTION', '')
+                    this.userJoinThisGame = true;
+                    this.joinbtn_text = 'Waiting'
+                    this.chosenNumberState = number
                     emitter.emit('finishProgress')
                 });
                 } catch(err) {
@@ -181,7 +206,7 @@ export default {
                     this.$store.commit('SET_CAPTION', '')
                     console.log("error: ", err)
                 }
-            } else if (this.joined === true) {
+            } else if (this.joined === true || this.joinbtn_text.length > 0) {
                 this.$store.commit('SET_MODAL', true)
                 this.$store.commit('SET_TITLE', 'Error')
                 this.$store.commit('SET_TYPE', 'info')
