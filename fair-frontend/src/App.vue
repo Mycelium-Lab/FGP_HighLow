@@ -280,13 +280,32 @@ export default {
             actualGamesList.push(chunk);
         }
       }
-      const emptiedGamesList = [];
-      for (let i = 0; i < actualGamesList.length; i++) {
-        const arr = []
-        emptiedGamesList.push(arr)
+      let gamesToDelete = []
+      for (let i = 0; i < this.games.length; i++) {
+        let existInActualGames = false;
+        for (let j = 0; j < actualGamesList.length; j++) {
+          if (this.games[i][3] == actualGamesList[j][3]) {
+            existInActualGames = true
+          }
+        }
+        if (existInActualGames == false) {
+          gamesToDelete.push(this.games[i])
+        }
       }
-      await this.$store.commit('SET_GAMES', emptiedGamesList);
-      await this.$store.commit('SET_GAMES', actualGamesList);
+      for(let i = 0; i < actualGamesList.length; i++) {
+        let existInGamesOnPage = false;
+        for (let j = 0; j < this.games.length; j++) {
+          if (this.games[j][3] == actualGamesList[i][3]) {
+            existInGamesOnPage = true
+          }
+        }
+        if (existInGamesOnPage == false) {
+          await this.$store.commit('SET_GAMES', actualGamesList[i]);
+        }
+      }
+      for(let i = 0; i < gamesToDelete.length; i++) {
+        await this.$store.commit('DELETE_GAMES', gamesToDelete[i]);
+      }
     },
 
     async getUserGames (contract, address) {
