@@ -29,7 +29,7 @@
                         pool is distributed equally among the winners.</span>
                 </div>
                 <div v-if="modalType === 'howtoget'" class="modal-rules">
-                    <span class="modal-rule">1. Buy Rose on CEX (Binance, KuCoin, Coinbase, Gate.io and etc.</span>
+                    <span class="modal-rule">1. Buy Rose on CEX (Binance, KuCoin, Coinbase, Gate.io and etc.)</span>
                     <span class="modal-rule">2. Creating an <a href="https://chrome.google.com/webstore/detail/oasis-wallet/ppdadbejkmjnefldpcdjhnkpbjkikoip" target="_blank">Oasis Wallet</a>;</span>
                     <span class="modal-rule">3. Adding <a href="https://chainlist.org/" target="_blank">Emerald Mainnet</a> to MetaMask;</span>
                     <span class="modal-rule">4. Bridging ROSE from Oasis Wallet to MetaMask;</span>
