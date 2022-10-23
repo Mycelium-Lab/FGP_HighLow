@@ -8,7 +8,7 @@
             <div class="modal-body">
                 <h1>{{ modalTitle }}</h1>
                 <div v-if="modalType === 'wallet_required'" class="modal-rule">Please connect your <a href="https://metamask.io/" target="_blank">Metamask</a> wallet </div>
-                <div v-if="modalType === 'wallet_bot_connected'" class="modal-rule">Please, connect your wallet</div>
+                <div v-if="modalType === 'wallet_bot_connected'" class="modal-rule">Please connect wallet</div>
                 <button v-if="modalType === 'wallet_bot_connected'" @click="handleClose()" class="modalbtn">OK</button>
                 <h2 v-if="modalType === 'info'||modalType === 'confirm'">{{ modalCaption }}</h2>
                 <div v-if="modalType === 'rules'" class="modal-rules">
@@ -27,6 +27,15 @@
                         the number chosen by the computer (but not less than 1 person), the rest - lost.</span>
                     <span class="modal-rule">5. Bets made by users form a prize pool. At the end of the game the prize
                         pool is distributed equally among the winners.</span>
+                </div>
+                <div v-if="modalType === 'howtoget'" class="modal-rules">
+                    <span class="modal-rule">1. Buy Rose on CEX (Binance, KuCoin, Coinbase, Gate.io and etc.</span>
+                    <span class="modal-rule">2. Creating an <a href="https://chrome.google.com/webstore/detail/oasis-wallet/ppdadbejkmjnefldpcdjhnkpbjkikoip" target="_blank">Oasis Wallet</a>;</span>
+                    <span class="modal-rule">3. Adding <a href="https://chainlist.org/" target="_blank">Emerald Mainnet</a> to MetaMask;</span>
+                    <span class="modal-rule">4. Bridging ROSE from Oasis Wallet to MetaMask;</span>
+                    <span class="modal-rule-video"><iframe src="//player.vimple.ru/iframe/61a462b8424e4aaca664fdce222ba5ef" width="480" height="305" frameborder="0" style="z-index:2147483647;" allowfullscreen></iframe></span>
+								
+                    
                 </div>
                 <div id="gameover-win-base" v-if="modalType === 'gameover-win'">
                     <div class="gameover-win">
@@ -345,6 +354,11 @@ h2 {
     line-height: 25px;
     text-align: center;
     color: #2C2F33;
+}
+
+.modal-rule-video {
+    margin: auto;
+    text-align: center;
 }
 
 .modal-specialrule {
