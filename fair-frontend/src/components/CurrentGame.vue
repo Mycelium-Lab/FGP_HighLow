@@ -40,6 +40,7 @@
         </div>
       </div>
       <h2 @click="openRules()">Game rules</h2>
+      <h2 @click="openHowToGet()">How to get ROSE</h2>
     </div>
     <div id="#current" v-if="games[0]" class="currentgames-wrapper">
       <h1>Current games</h1>
@@ -179,6 +180,12 @@ export default {
       this.$store.commit('SET_MODAL', true)
       this.$store.commit('SET_TITLE', 'Game rules')
       this.$store.commit('SET_TYPE', 'rules')
+      this.$store.commit('SET_CAPTION', '')
+    },
+    openHowToGet() {
+      this.$store.commit('SET_MODAL', true)
+      this.$store.commit('SET_TITLE', 'How to get ROSE')
+      this.$store.commit('SET_TYPE', 'howtoget')
       this.$store.commit('SET_CAPTION', '')
     }
   }
