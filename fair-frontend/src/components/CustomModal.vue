@@ -33,9 +33,7 @@
                     <span class="modal-rule">2. Creating an <a href="https://chrome.google.com/webstore/detail/oasis-wallet/ppdadbejkmjnefldpcdjhnkpbjkikoip" target="_blank">Oasis Wallet</a>;</span>
                     <span class="modal-rule">3. Adding <a href="https://chainlist.org/" target="_blank">Emerald Mainnet</a> to MetaMask;</span>
                     <span class="modal-rule">4. Bridging ROSE from Oasis Wallet to MetaMask.</span>
-                    <span class="modal-rule-video"><iframe src="//player.vimple.ru/iframe/61a462b8424e4aaca664fdce222ba5ef" width="480" height="305" frameborder="0" style="z-index:2147483647;" allowfullscreen></iframe></span>
-								
-                    
+                    <span class="modal-rule-video"><iframe src="//player.vimple.ru/iframe/61a462b8424e4aaca664fdce222ba5ef" class="modal-video-content" frameborder="0" style="z-index:2147483647;" allowfullscreen></iframe></span>
                 </div>
                 <div id="gameover-win-base" v-if="modalType === 'gameover-win'">
                     <div class="gameover-win">
@@ -520,5 +518,21 @@ h2 {
 }
 .gameover-win-elem {
     width: 70%;
+}
+@media screen and (max-width: 390px) {
+    .modal-video-content  {
+        width: 300px;
+        margin: 0 auto;
+    }
+}
+
+
+@media screen and (min-width: 720px) {
+    .modal-video-content  {
+        width: 600px;
+        height: 305px;
+        margin: 0 auto;
+        margin-bottom: 25px;
+    }
 }
 </style>
