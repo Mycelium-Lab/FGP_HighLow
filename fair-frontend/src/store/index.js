@@ -17,7 +17,8 @@ export default createStore({
     modalAmount: null,
     modalFinishID: null,
     accountShorted: null,
-    winnersShown: null
+    winnersShown: null,
+    luckyNumber: null
   },
   getters: {
   },
@@ -63,6 +64,9 @@ export default createStore({
     },
     SET_FINISH_ID(state, ID){
       state.modalFinishID = ID
+    },
+    SET_LUCKY_NUMBER(state, luckyNumber){
+      state.luckyNumber = luckyNumber
     },
     SET_SHORTED(state, shorted) {
       state.accountShorted = shorted
