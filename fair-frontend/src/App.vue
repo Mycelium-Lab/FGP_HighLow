@@ -348,6 +348,7 @@ export default {
           const address = await signer.getAddress()
           const winnerClaimed = await _contract.prizeList(address, gameId.toString())
           if (winnerClaimed.isClaimed == false) {
+              const luckyNumber = (await _contract.gamesList(gameId.toString())).luckyNumber
               if (winners.includes(address)) {
                 const index = winners.indexOf(address)
                 const prize = prizes[index].toString()
@@ -356,12 +357,14 @@ export default {
                 this.$store.commit('SET_TYPE', 'gameover-win')
                 this.$store.commit('SET_AMOUNT', ethers.utils.formatEther(prize))
                 this.$store.commit('SET_FINISH_ID', gameId.toString())
+                this.$store.commit('SET_LUCKY_NUMBER', luckyNumber.toString())
                 // this.$store.commit('SET_AMOUNT', ethers.utils.formatEther('10700000000000000000'))
                 // this.$store.commit('SET_FINISH_ID', '0')
               } else {
                 this.$store.commit('SET_MODAL', true)
                 this.$store.commit('SET_TITLE', 'Game over')
                 this.$store.commit('SET_TYPE', 'gameover-lose')
+                this.$store.commit('SET_LUCKY_NUMBER', luckyNumber.toString())
               }
           }
         }
