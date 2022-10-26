@@ -41,6 +41,7 @@
                             <p id="gameover-win-text">You WIN!</p>
                             <p id="gameover-win-second-text">You <span id="gameover-win-tokens">won {{modalAmount}}
                                     Tokens</span></p>
+                            <p id="gameover-win-second-text">Lucky number is <span id="gameover-win-tokens">{{luckyNumber}}</span></p>
                         </div>
                         <div class="gameover-win-elem">
                             <img class="maskot" src="../../public/Gif/zerkalo.gif">
@@ -51,6 +52,7 @@
                 <div id="gameover-win-lose" v-if="modalType === 'gameover-lose'">
                     <img class="maskot" src="../../public/Gif/lose.gif">
                     <p id="gameover-lose-text">You LOSE!</p>
+                    <p id="gameover-lose-text">Lucky number is {{luckyNumber}}</p>
                 </div>
                 <div v-if="modalType === 'rules'||(modalType === 'info' && this.inProgress === false) ">
                     <img class="maskot" src="../../public/Gif/guys.gif" width="160 px">
@@ -111,6 +113,9 @@ export default {
         id: function () {
             return this.$store.state.modalFinishID
         },
+        luckyNumber: function () {
+            return this.$store.state.luckyNumber
+        }
     },
     methods: {
         handleClose() {
