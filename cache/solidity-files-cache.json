@@ -1,9 +1,9 @@
 {
   "_format": "hh-sol-cache-2",
   "files": {
-    "/home/egor/Документы/WorkplaceSmartContracts/fair-p2p-game/contracts/Fair.sol": {
-      "lastModificationDate": 1669113893353,
-      "contentHash": "cc2ef18ad49e6ee76dff3f71f073ed95",
+    "C:\\Users\\User\\Documents\\Work\\Blockchain\\fair-p2p-game\\contracts\\Fair.sol": {
+      "lastModificationDate": 1669128762855,
+      "contentHash": "d9c276ffbfaf33e7993ada3b94ca0ce9",
       "sourceName": "contracts/Fair.sol",
       "solcConfig": {
         "version": "0.8.17",
@@ -38,8 +38,8 @@
         "Fair"
       ]
     },
-    "/home/egor/Документы/WorkplaceSmartContracts/fair-p2p-game/node_modules/@openzeppelin/contracts/access/Ownable.sol": {
-      "lastModificationDate": 1662035884816,
+    "C:\\Users\\User\\Documents\\Work\\Blockchain\\fair-p2p-game\\node_modules\\@openzeppelin\\contracts\\access\\Ownable.sol": {
+      "lastModificationDate": 1669127699617,
       "contentHash": "e436cea06129be2c73cda4b1acc848b5",
       "sourceName": "@openzeppelin/contracts/access/Ownable.sol",
       "solcConfig": {
@@ -75,8 +75,8 @@
         "Ownable"
       ]
     },
-    "/home/egor/Документы/WorkplaceSmartContracts/fair-p2p-game/node_modules/@openzeppelin/contracts/utils/Context.sol": {
-      "lastModificationDate": 1662035884784,
+    "C:\\Users\\User\\Documents\\Work\\Blockchain\\fair-p2p-game\\node_modules\\@openzeppelin\\contracts\\utils\\Context.sol": {
+      "lastModificationDate": 1669127699093,
       "contentHash": "5f2c5c4b6af2dd4551027144797bc8be",
       "sourceName": "@openzeppelin/contracts/utils/Context.sol",
       "solcConfig": {
@@ -110,9 +110,9 @@
         "Context"
       ]
     },
-    "/home/egor/Документы/WorkplaceSmartContracts/fair-p2p-game/contracts/FairHighlow.sol": {
-      "lastModificationDate": 1669115938410,
-      "contentHash": "aa61af93a3824af0a48b98c07b8afc2b",
+    "C:\\Users\\User\\Documents\\Work\\Blockchain\\fair-p2p-game\\contracts\\FairHighlow.sol": {
+      "lastModificationDate": 1669156707345,
+      "contentHash": "37730dd214896577823a0d75b40cdb86",
       "sourceName": "contracts/FairHighlow.sol",
       "solcConfig": {
         "version": "0.8.17",
@@ -148,8 +148,8 @@
         "FairHighlow"
       ]
     },
-    "/home/egor/Документы/WorkplaceSmartContracts/fair-p2p-game/node_modules/@openzeppelin/contracts/token/ERC20/IERC20.sol": {
-      "lastModificationDate": 1662035884808,
+    "C:\\Users\\User\\Documents\\Work\\Blockchain\\fair-p2p-game\\node_modules\\@openzeppelin\\contracts\\token\\ERC20\\IERC20.sol": {
+      "lastModificationDate": 1669127699502,
       "contentHash": "ad7c2d0af148c8f9f097d65deeb4da6b",
       "sourceName": "@openzeppelin/contracts/token/ERC20/IERC20.sol",
       "solcConfig": {
@@ -183,8 +183,8 @@
         "IERC20"
       ]
     },
-    "/home/egor/Документы/WorkplaceSmartContracts/fair-p2p-game/node_modules/@openzeppelin/contracts/token/ERC20/extensions/IERC20Metadata.sol": {
-      "lastModificationDate": 1662035884812,
+    "C:\\Users\\User\\Documents\\Work\\Blockchain\\fair-p2p-game\\node_modules\\@openzeppelin\\contracts\\token\\ERC20\\extensions\\IERC20Metadata.sol": {
+      "lastModificationDate": 1669127699510,
       "contentHash": "909ab67fc5c25033fe6cd364f8c056f9",
       "sourceName": "@openzeppelin/contracts/token/ERC20/extensions/IERC20Metadata.sol",
       "solcConfig": {
@@ -220,8 +220,8 @@
         "IERC20Metadata"
       ]
     },
-    "/home/egor/Документы/WorkplaceSmartContracts/fair-p2p-game/node_modules/@openzeppelin/contracts/token/ERC20/ERC20.sol": {
-      "lastModificationDate": 1662035884792,
+    "C:\\Users\\User\\Documents\\Work\\Blockchain\\fair-p2p-game\\node_modules\\@openzeppelin\\contracts\\token\\ERC20\\ERC20.sol": {
+      "lastModificationDate": 1669127699257,
       "contentHash": "af7bd64e1cfefbf6cb07f2adc1a25392",
       "sourceName": "@openzeppelin/contracts/token/ERC20/ERC20.sol",
       "solcConfig": {
@@ -259,9 +259,9 @@
         "ERC20"
       ]
     },
-    "/home/egor/Документы/WorkplaceSmartContracts/fair-p2p-game/contracts/Utils/TokenForTests.sol": {
-      "lastModificationDate": 1669113865381,
-      "contentHash": "8bc37f56a2ba25b3603c53ed3f0dde6c",
+    "C:\\Users\\User\\Documents\\Work\\Blockchain\\fair-p2p-game\\contracts\\Utils\\TokenForTests.sol": {
+      "lastModificationDate": 1669128762855,
+      "contentHash": "8a73e420d538132ee0fe931ecf32d6c7",
       "sourceName": "contracts/Utils/TokenForTests.sol",
       "solcConfig": {
         "version": "0.8.17",
